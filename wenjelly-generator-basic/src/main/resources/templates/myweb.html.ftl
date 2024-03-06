@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>鱼皮官网</title>
+    <title>FreeMarker官网</title>
 </head>
 <body>
-<h1>欢迎来到鱼皮官网</h1>
+<h1>欢迎来到FreeMarker官网</h1>
 <ul>
     <#-- 循环渲染导航条 -->
     <#list menuItems as item>
@@ -13,7 +13,7 @@
 </ul>
 <#-- 底部版权信息（注释部分，不会被输出）-->
 <footer>
-    ${currentYear} 鱼皮官网. All rights reserved.
+    ${currentYear} FreeMarker官网. All rights reserved.
 </footer>
 </body>
 </html>

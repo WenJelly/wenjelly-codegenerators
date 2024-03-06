@@ -44,6 +44,9 @@ public class DynamicAndStaticGenerator {
      */
     public static void main(String[] args) throws TemplateException, IOException {
 
+    }
+
+    public void doGenerate(MainTemplateConfig model) throws TemplateException, IOException {
         // 获取静态的输入输出位置
         staticInputPath = property + File.separator + "wenjelly-generator-demo-projects"
                 + File.separator + "acm-template";
@@ -52,11 +55,6 @@ public class DynamicAndStaticGenerator {
         // 生成静态文件
         StaticGenerator.copyFileByHuTool(staticInputPath,staticOutputPath);
 
-        // 创建数据模型
-        MainTemplateConfig model = new MainTemplateConfig();
-        model.setAuthor("WenJelly");
-        model.setOutputText(" 输出结果 = ");
-        model.setLoop(true);
 
         // 获取动态输入输出位置
         dynamicInputPath = property + File.separator + "wenjelly-generator-basic"
