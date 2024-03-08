@@ -1,4 +1,4 @@
-package com.wenjelly.cli.command;
+package com.wenjelly.maker.cli.command;
 
 /*
  * @time 2024/3/6 10:45
@@ -9,8 +9,8 @@ package com.wenjelly.cli.command;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import com.wenjelly.generator.DynamicAndStaticGenerator;
-import com.wenjelly.model.MainTemplateConfig;
+import com.wenjelly.maker.generator.file.FileGenerator;
+import com.wenjelly.maker.model.DataModel;
 import lombok.Data;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -42,7 +42,7 @@ public class GenerateCommand implements Callable {
     @Override
     public Object call() throws Exception {
         // 创建数据模型
-        MainTemplateConfig model = new MainTemplateConfig();
+        DataModel model = new DataModel();
 //        model.setAuthor(author);
 //        model.setOutputText(outputText);
 //        model.setLoop(loop);
@@ -50,7 +50,7 @@ public class GenerateCommand implements Callable {
         BeanUtil.copyProperties(this,model);
 
         // 将数据模型传递给模板,创建代码生成器（包括静态与动态）
-        DynamicAndStaticGenerator mainGenerator = new DynamicAndStaticGenerator();
+        FileGenerator mainGenerator = new FileGenerator();
         mainGenerator.doGenerate(model);
         return 0;
     }

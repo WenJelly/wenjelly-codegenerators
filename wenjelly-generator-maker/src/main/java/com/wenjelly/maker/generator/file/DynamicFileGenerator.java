@@ -1,4 +1,4 @@
-package com.wenjelly.generator;
+package com.wenjelly.maker.generator.file;
 
 /*
  * @time 2024/3/3 22:18
@@ -8,6 +8,7 @@ package com.wenjelly.generator;
  */
 
 
+import cn.hutool.core.io.FileUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -19,7 +20,7 @@ import java.io.IOException;
 /*
  * 该类用于生成动态代码
  */
-public class DynamicGenerator {
+public class DynamicFileGenerator {
     /**
      * 生成动态文件
      *
@@ -41,7 +42,11 @@ public class DynamicGenerator {
         // 获取模板文件并加载
         String fileName = new File(inputPath).getName();
         Template template = configuration.getTemplate(fileName);
-        // 指定生成的文件,注意：目录一定要存在，否则会报错
+
+        // 如果文件不存在，就创建，这样后面就不会报错了
+        if (!FileUtil.exist(outputPath)){
+            FileUtil.touch(outputPath);
+        }
         FileWriter fileWriter = new FileWriter(outputPath);
         // 将数据模型传递给模板并生成目标文件
         template.process(model,fileWriter);

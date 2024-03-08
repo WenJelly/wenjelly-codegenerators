@@ -1,8 +1,8 @@
-package com.wenjelly.cli;
+package com.wenjelly.maker.cli;
 
-import com.wenjelly.cli.command.ConfigCommand;
-import com.wenjelly.cli.command.ListCommand;
-import com.wenjelly.cli.command.GenerateCommand;
+import com.wenjelly.maker.cli.command.ConfigCommand;
+import com.wenjelly.maker.cli.command.ListCommand;
+import com.wenjelly.maker.cli.command.GenerateCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
