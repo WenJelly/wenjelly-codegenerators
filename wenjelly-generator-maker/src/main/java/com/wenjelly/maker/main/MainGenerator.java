@@ -70,10 +70,25 @@ public class MainGenerator {
         outputFilePath  = outputPath + File.separator + "src/main/java/" + File.separator + join
                 + "/cli/CommandExecutor.java";
         DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
-        //Main模板
+        // Main模板
         inputFilePath = inputResourcePath + File.separator + "templates/java/Main.java.ftl";
         outputFilePath  = outputPath + File.separator + "src/main/java/" + File.separator + join
                 + "/Main.java";
+        DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
+        // DynamicFileGenerator模板
+        inputFilePath = inputResourcePath + File.separator + "templates/java/generator/DynamicFileGenerator.java.ftl";
+        outputFilePath  = outputPath + File.separator + "src/main/java/" + File.separator + join
+                + "/generator/DynamicFileGenerator.java";
+        DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
+        // StaticFileGenerator模板
+        inputFilePath = inputResourcePath + File.separator + "templates/java/generator/StaticFileGenerator.java.ftl";
+        outputFilePath  = outputPath + File.separator + "src/main/java/" + File.separator + join
+                + "/generator/StaticFileGenerator.java";
+        DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
+        // MainFileGenerator模板
+        inputFilePath = inputResourcePath + File.separator + "templates/java/generator/MainFileGenerator.java.ftl";
+        outputFilePath  = outputPath + File.separator + "src/main/java/" + File.separator + join
+                + "/generator/MainFileGenerator.java";
         DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
 
     }
