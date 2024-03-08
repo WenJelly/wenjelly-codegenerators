@@ -3,7 +3,7 @@
   "description": "ACM 示例模板生成器",
   "basePackage": "com.wenjelly",
   "version": "1.0",
-  "author": "wenjelly",
+  "author": "WenJelly",
   "createTime": "2024-3-8",
   "fileConfig": {
     "inputRootPath": "D:/Development/IDEAJavaProjects/wenjelly-generators/wenjelly-generator-demo-projects/acm-template",

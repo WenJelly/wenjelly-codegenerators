@@ -1,10 +1,10 @@
-package com.wenjelly.maker.cli.command;
+package ${basePackage}.cli.command;
 
 /*
- * @time 2024/3/6 10:44
- * @package com.wenjelly.cli.command
- * @project wenjelly-generators
- * @author WenJelly
+ * @time ${createTime}
+ * @package ${basePackage}.cli.command
+ * @project ${name}
+ * @author ${author}
  */
 
 

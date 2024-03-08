@@ -25,10 +25,10 @@ public class MainGenerator {
     public static void main(String[] args) throws TemplateException, IOException {
         Meta meta = MetaManager.getMetaObject();
 
-        String projectPath  = System.getProperty("user.dir");
+        String projectPath = System.getProperty("user.dir");
         // 输出根路径
         String outputPath = projectPath + File.separator + "generated" + File.separator + meta.getName();
-        if (!FileUtil.exist(outputPath)){
+        if (!FileUtil.exist(outputPath)) {
             FileUtil.mkdir(outputPath);
         }
 
@@ -48,8 +48,33 @@ public class MainGenerator {
         String inputResourcePath = classPathResource.getAbsolutePath();
         String inputFilePath = inputResourcePath + File.separator + "templates/java/model/DataModel.java.ftl";
 
+        DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
 
-        DynamicFileGenerator.doGenerate(inputFilePath,outputFilePath,meta);
+        // ConfigCommand 模板
+        inputFilePath = inputResourcePath + File.separator + "templates/java/cli/command/ConfigCommand.java.ftl";
+        outputFilePath  = outputPath + File.separator + "src/main/java/" + File.separator + join
+            + "/cli/command/ConfigCommand.java";
+        DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
+        // ListCommand模板
+        inputFilePath = inputResourcePath + File.separator + "templates/java/cli/command/ListCommand.java.ftl";
+        outputFilePath  = outputPath + File.separator + "src/main/java/" + File.separator + join
+                + "/cli/command/ListCommand.java";
+        DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
+        // GenerateCommand模板
+        inputFilePath = inputResourcePath + File.separator + "templates/java/cli/command/GenerateCommand.java.ftl";
+        outputFilePath  = outputPath + File.separator + "src/main/java/" + File.separator + join
+                + "/cli/command/GenerateCommand.java";
+        DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
+        // CommandExecutor模板
+        inputFilePath = inputResourcePath + File.separator + "templates/java/cli/CommandExecutor.java.ftl";
+        outputFilePath  = outputPath + File.separator + "src/main/java/" + File.separator + join
+                + "/cli/CommandExecutor.java";
+        DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
+        //Main模板
+        inputFilePath = inputResourcePath + File.separator + "templates/java/Main.java.ftl";
+        outputFilePath  = outputPath + File.separator + "src/main/java/" + File.separator + join
+                + "/Main.java";
+        DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
 
     }
 

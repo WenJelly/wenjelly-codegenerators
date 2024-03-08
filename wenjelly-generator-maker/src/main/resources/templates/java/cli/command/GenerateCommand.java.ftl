@@ -1,11 +1,11 @@
-package com.wenjelly.maker.cli.command;
+package ${basePackage}.cli.command;
 
 /*
- * @time 2024/3/6 10:45
- * @package com.wenjelly.cli.command
- * @project wenjelly-generators
- * @author WenJelly
- */
+ * @time ${createTime}
+ * @package ${basePackage}.cli.command
+ * @project ${name}
+ * @author ${author}
+*/
 
 
 import cn.hutool.core.bean.BeanUtil;
@@ -21,23 +21,10 @@ import java.util.concurrent.Callable;
 @Data
 public class GenerateCommand implements Callable {
 
-    /*
-    作者
-     */
-    @Option(names = {"-a", "--author"}, description = "作者名称", arity = "0..1", interactive = true, prompt = "请输入作者: ", echo = true)
-    private String author;
-
-    /*
-    输出结果文本
-     */
-    @Option(names = {"-o", "--outputText"}, description = "输入文本", arity = "0..1", interactive = true, prompt = "请输入输出文本: ", echo = true)
-    private String outputText;
-
-    /*
-    是否创建while循环
-     */
-    @Option(names = {"-l", "--loop"}, description = "是否循环", arity = "0..1", interactive = true, prompt = "请输入是否循环: ", echo = true)
-    private boolean loop;
+    <#list modelConfig.models as modelInfo>
+        @Option(names = {<#if modelInfo.abbr??> "-${modelInfo.abbr}" , </#if>"--${modelInfo.fieldName}"}, <#if modelInfo.description??>description = "${modelInfo.description}",</#if> arity = "0..1", interactive = true,  echo = true)
+        private ${modelInfo.type} ${modelInfo.fieldName} <#if modelInfo.defaultValue??> = ${modelInfo.defaultValue?c} </#if>;
+    </#list>
 
     @Override
     public Object call() throws Exception {
