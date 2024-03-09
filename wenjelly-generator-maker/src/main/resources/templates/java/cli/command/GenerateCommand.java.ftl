@@ -9,8 +9,8 @@ package ${basePackage}.cli.command;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import com.wenjelly.maker.generator.file.FileGenerator;
-import com.wenjelly.maker.model.DataModel;
+import com.wenjelly.generator.MainFileGenerator;
+import com.wenjelly.model.DataModel;
 import lombok.Data;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -37,7 +37,7 @@ public class GenerateCommand implements Callable {
         BeanUtil.copyProperties(this,model);
 
         // 将数据模型传递给模板,创建代码生成器（包括静态与动态）
-        FileGenerator mainGenerator = new FileGenerator();
+        MainFileGenerator mainGenerator = new MainFileGenerator();
         mainGenerator.doGenerate(model);
         return 0;
     }

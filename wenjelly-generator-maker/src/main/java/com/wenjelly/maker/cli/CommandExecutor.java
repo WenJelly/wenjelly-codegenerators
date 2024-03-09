@@ -1,18 +1,18 @@
-package ${basePackage}.cli;
+package com.wenjelly.maker.cli;
 
-import com.wenjelly.cli.command.ConfigCommand;
-import com.wenjelly.cli.command.ListCommand;
-import com.wenjelly.cli.command.GenerateCommand;
+import com.wenjelly.maker.cli.command.ConfigCommand;
+import com.wenjelly.maker.cli.command.GenerateCommand;
+import com.wenjelly.maker.cli.command.ListCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 /*
- * @time ${createTime}
- * @package ${basePackage}.cli
- * @project ${name}
- * @author ${author}
-*/
-@Command(name = "${name}", version = "${name}${version}", mixinStandardHelpOptions = true)
+ * @time 2024/3/6 10:55
+ * @package com.wenjelly.cli
+ * @project wenjelly-generators
+ * @author WenJelly
+ */
+@Command(name = "wenjelly", version = "wenjelly 1.0", mixinStandardHelpOptions = true)
 public class CommandExecutor implements Runnable {
 
     private CommandLine commandLine;

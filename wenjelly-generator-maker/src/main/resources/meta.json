@@ -6,13 +6,13 @@
   "author": "WenJelly",
   "createTime": "2024-3-8",
   "fileConfig": {
-    "inputRootPath": "D:/Development/IDEAJavaProjects/wenjelly-generators/wenjelly-generator-maker",
+    "inputRootPath": "D:/Development/IDEAJavaProjects/wenjelly-generators/wenjelly-generator-demo-projects/acm-template",
     "outputRootPath": "generated",
     "type": "dir",
     "files": [
       {
-        "inputPath": "src/com/wenjelly/main/resources/template/java/generator/MainFileGenerator.java.ftl",
-        "outputPath": "acm-template-generator/src/main/java/com/wenjelly/generator/MainFileGenerator.java",
+        "inputPath": "src/main/java/com/wenjelly/acm/acmtemplate.java.ftl",
+        "outputPath": "acm-template-generator/",
         "type": "file",
         "generateType": "dynamic"
       },

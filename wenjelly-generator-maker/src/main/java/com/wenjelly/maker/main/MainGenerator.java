@@ -11,6 +11,8 @@ import cn.hutool.Hutool;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
+import com.wenjelly.maker.generator.JarGenerator;
+import com.wenjelly.maker.generator.ScriptGenerator;
 import com.wenjelly.maker.generator.file.DynamicFileGenerator;
 import com.wenjelly.maker.meta.Meta;
 import com.wenjelly.maker.meta.MetaManager;
@@ -22,7 +24,7 @@ import java.util.List;
 
 public class MainGenerator {
 
-    public static void main(String[] args) throws TemplateException, IOException {
+    public static void main(String[] args) throws TemplateException, IOException, InterruptedException {
         Meta meta = MetaManager.getMetaObject();
 
         String projectPath = System.getProperty("user.dir");
@@ -90,6 +92,19 @@ public class MainGenerator {
         outputFilePath  = outputPath + File.separator + "src/main/java/" + File.separator + join
                 + "/generator/MainFileGenerator.java";
         DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
+        // pom模板
+        inputFilePath = inputResourcePath + File.separator + "templates/pom.xml.ftl";
+        outputFilePath  = outputPath + File.separator + "pom.xml";
+        DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
+
+        // 构建 jar 包
+        JarGenerator.doGenerate(outputPath);
+
+        // 程序封装脚本
+        String shellPath = outputPath + File.separator + "generator";
+        String jarName = String.format("%s-%s-jar-with-dependencies.jar",meta.getName(),meta.getVersion());
+        String jarPath = "target/" + jarName;
+        ScriptGenerator.doGenerate(shellPath,jarPath);
 
     }
 

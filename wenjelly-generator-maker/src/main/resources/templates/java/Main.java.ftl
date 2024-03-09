@@ -1,14 +1,12 @@
-package ${basePackage}
+package ${basePackage};
 
 /*
  * @time ${createTime}
- * @package ${basePackage}.model
+ * @package ${basePackage}
  * @project ${name}
  * @author ${author}
 */
-
-
-import com.wenjelly.maker.cli.CommandExecutor;
+import com.wenjelly.cli.CommandExecutor;
 
 public class Main {
     public static void main(String[] args) {

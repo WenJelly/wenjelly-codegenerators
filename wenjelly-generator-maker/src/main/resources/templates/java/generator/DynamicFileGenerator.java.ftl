@@ -1,4 +1,4 @@
-package package ${basePackage}.generator;
+package ${basePackage}.generator;
 
 /*
  * @time ${createTime}

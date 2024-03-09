@@ -1,4 +1,4 @@
-package package ${basePackage}.generator;
+package ${basePackage}.generator;
 
 /*
  * @time ${createTime}
@@ -7,7 +7,7 @@ package package ${basePackage}.generator;
  * @author ${author}
 */
 
-import com.wenjelly.maker.model.DataModel;
+import com.wenjelly.model.DataModel;
 import freemarker.template.TemplateException;
 
 import java.io.File;
@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * 生成动态和静态，相当于结合
  */
-public class FileGenerator {
+public class MainFileGenerator {
 
     /**
      * 完整生成（静态+动态）
@@ -40,13 +40,12 @@ public class FileGenerator {
         <#list fileConfig.files as fileInfo>
             inputPath = new File(inputRootPath,"${fileInfo.inputPath}").getAbsolutePath();
             outputPath = new File(outputRootPath,"${fileInfo.outputPath}").getAbsolutePath();
-
             <#if fileInfo.generateType == "static">
             // 生成静态文件
             StaticFileGenerator.copyFileByHuTool(inputPath,outputPath);
             <#else >
             // 生成动态文件
-            DynamicGenerator.doGenerate(inputPath, outputPath, model);
+            DynamicFileGenerator.doGenerate(inputPath, outputPath, model);
             </#if>
         </#list>
 

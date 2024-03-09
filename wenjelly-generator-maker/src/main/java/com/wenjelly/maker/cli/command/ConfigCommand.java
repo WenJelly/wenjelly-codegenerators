@@ -1,15 +1,15 @@
-package ${basePackage}.cli.command;
+package com.wenjelly.maker.cli.command;
 
 /*
- * @time ${createTime}
- * @package ${basePackage}.cli.command
- * @project ${name}
- * @author ${author}
+ * @time 2024/3/6 10:44
+ * @package com.wenjelly.cli.command
+ * @project wenjelly-generators
+ * @author WenJelly
  */
 
 
 import cn.hutool.core.util.ReflectUtil;
-import com.wenjelly.model.DataModel;
+import com.wenjelly.maker.model.DataModel;
 import picocli.CommandLine.Command;
 
 import java.lang.reflect.Field;
