@@ -41,8 +41,8 @@ public class MetaManager {
         String metaJson = ResourceUtil.readUtf8Str("meta.json");
         // 将json字符串转化为对象并进行赋值
         Meta newMeta = JSONUtil.toBean(metaJson, Meta.class);
-        Meta.FileConfigBean fileConfig = newMeta.getFileConfig();
-        // todo 校验和处理默认值
+        // 校验和处理默认值
+        MetaValidator.doValidAndFill(newMeta);
         return newMeta;
     }
 

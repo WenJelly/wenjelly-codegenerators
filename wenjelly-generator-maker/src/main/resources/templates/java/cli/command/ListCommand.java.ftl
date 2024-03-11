@@ -19,7 +19,7 @@ public class ListCommand implements Runnable {
     @Override
     public void run() {
 
-        String inputPath = "${fileConfig.inputRootPath} ";
+        String inputPath = "${fileConfig.inputRootPath}";
         // hutool工具类，可以遍历目录
         List<File> files = FileUtil.loopFiles(inputPath);
         for (File f : files) {
