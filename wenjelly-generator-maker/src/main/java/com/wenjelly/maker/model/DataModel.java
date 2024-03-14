@@ -26,10 +26,10 @@ public class DataModel {
     /**
      * 核心模板文件
      */
-    public MainTemplate mainTemplate;
+    public MainTemplate mainTemplate = new MainTemplate();
 
     @Data
-    public class MainTemplate {
+    public static class MainTemplate {
         /**
          * 作者注释
          */

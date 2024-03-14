@@ -59,6 +59,8 @@
         "groupName": "核心模板",
         "type": "MainTemplate",
         "description": "用于生成核心文件",
+        "condition": "loop",
+        "allArgsStr": "",
         "models": [
           {
             "fieldName": "author",

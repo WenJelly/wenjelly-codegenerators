@@ -38,7 +38,7 @@ public class MainFileGenerator {
 
     }
 
-    public void doGenerate(DataModel model) throws TemplateException, IOException {
+    public static void doGenerate(DataModel model) throws TemplateException, IOException {
 
         // 输入位置的根目录
         String inputRootPath = "${fileConfig.inputRootPath}";
@@ -50,17 +50,23 @@ public class MainFileGenerator {
         String outputPath;
 
         <#list modelConfig.models as modelInfo>
+        <#if modelInfo.groupName??>
+        <#list modelInfo.models as subModelInfo>
+        ${subModelInfo.type} ${subModelInfo.fieldName} = model.${modelInfo.groupKey}.${subModelInfo.fieldName};
+        </#list>
+        <#else>
         ${modelInfo.type} ${modelInfo.fieldName} = model.${modelInfo.fieldName};
+        </#if>
         </#list>
 
         <#list fileConfig.files as fileInfo>
         <#if fileInfo.groupKey??>
         // groupKey = ${fileInfo.groupKey}
-        <#list fileInfo.files as groupInfo>
         if (${fileInfo.condition}) {
+        <#list fileInfo.files as groupInfo>
         <@generateFile indent="            " fileInfo=groupInfo></@generateFile>
-        }
         </#list>
+        }
         <#else >
         <@generateFile indent="        " fileInfo=fileInfo></@generateFile>
         </#if>

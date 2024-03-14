@@ -91,6 +91,11 @@ public class Meta {
             private String groupKey;
             private String groupName;
             private List<ModelInfo> models;
+            private String condition;
+
+            // 中间参数
+            // 该分组下所有的参数拼接字符串
+            private String allArgsStr;
         }
     }
 }
