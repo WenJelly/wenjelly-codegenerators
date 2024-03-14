@@ -18,26 +18,6 @@ import java.io.IOException;
  */
 public class FileGenerator {
 
-    private static String property = System.getProperty("user.dir"); //wenjelly-generators
-
-    /*
-     *静态目标输入位置
-     */
-    private static String staticInputPath;
-    /**
-     *静态目标输出位置
-     */
-    private static String staticOutputPath;
-
-    /**
-     * 动态模板输入位置
-     */
-    private static String dynamicInputPath;
-    /**
-     * 动态模板输出位置
-     */
-    private static String dynamicOutputPath;
-
     /**
      * 完整生成（静态+动态）
      * @param args
@@ -47,25 +27,37 @@ public class FileGenerator {
     }
 
     public void doGenerate(DataModel model) throws TemplateException, IOException {
-        // 获取静态的输入位置
-        staticInputPath = property + File.separator + "wenjelly-generator-demo-projects"
-                + File.separator + "acm-template";
-        // 获取静态的输出位置
-        staticOutputPath = property + File.separator + "wenjelly-generator-maker"
-                + File.separator + "src/main/resources/templatesout";
-        // 生成静态文件
-        StaticFileGenerator.copyFileByHuTool(staticInputPath,staticOutputPath);
+
+        // 输入位置的根目录
+        String inputRootPath = ".source/acm-template";
+        // 输出位置的根目录
+        String outputRootPath = "generated";
+        // 最终输入路径 ： 输入位置的根目录 + 相对路径
+        String inputPath;
+        // 最终输出路径 ： 输出位置的根目录 + 相对路径
+        String outputPath;
+
+        boolean needGit = model.needGit;
+        boolean loop = model.loop;
 
 
-        // 获取动态输入位置
-        dynamicInputPath = property + File.separator + "wenjelly-generator-maker"
-                + File.separator + "src/main/resources/templates/acmtemplate.java.ftl";
-        // 获取动态输出位置
-        dynamicOutputPath = property + File.separator + "wenjelly-generator-maker"
-                + File.separator + "src/main/resources/templatesout"
-                + File.separator + "acm-template/src/main/java/com/wenjelly/acm/MainTemplate.java";
+        // groupKey = git
+        if (needGit) {
+            inputPath = new File(inputRootPath,".gitignore").getAbsolutePath();
+            outputPath = new File(outputRootPath,".gitignore").getAbsolutePath();
+            // 生成静态文件
+            StaticFileGenerator.copyFileByHuTool(inputPath,outputPath);
+        }
+        if (needGit) {
+            inputPath = new File(inputRootPath,"README.md").getAbsolutePath();
+            outputPath = new File(outputRootPath,"README.md").getAbsolutePath();
+            // 生成静态文件
+            StaticFileGenerator.copyFileByHuTool(inputPath,outputPath);
+        }
+        inputPath = new File(inputRootPath,"src/main/java/com/wenjelly/acm/acmtemplate.java.ftl").getAbsolutePath();
+        outputPath = new File(outputRootPath,"acm-template-generator/src/com/wenjelly/acm/Acmtemplate.java").getAbsolutePath();
         // 生成动态文件
-        DynamicFileGenerator.doGenerate(dynamicInputPath,dynamicOutputPath,model);
+        DynamicFileGenerator.doGenerate(inputPath, outputPath, model);
 
     }
 
