@@ -7,23 +7,25 @@ package com.wenjelly.makerplus.main;
  * @author WenJelly
  */
 
+
+
+
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.template.TemplateException;
 import com.wenjelly.makerplus.generator.JarGenerator;
 import com.wenjelly.makerplus.generator.ScriptGenerator;
 import com.wenjelly.makerplus.generator.file.DynamicFileGenerator;
 import com.wenjelly.makerplus.meta.Meta;
 import com.wenjelly.makerplus.meta.MetaManager;
-import freemarker.template.TemplateException;
-
 
 import java.io.File;
 import java.io.IOException;
 
 public abstract class MainGeneratorTemplate {
 
-    public void doGenerator() throws TemplateException, IOException, InterruptedException {
+    public void doGenerator() throws TemplateException, IOException, InterruptedException, freemarker.template.TemplateException {
         // 得到元信息
         Meta meta = MetaManager.getMetaObject();
         // 模板输出位置根路径 wenjelly-generator-makerplus/generator
@@ -94,7 +96,7 @@ public abstract class MainGeneratorTemplate {
         FileUtil.copy(sourceRootPath, outputSourcePath, true);
     }
 
-    protected void doPomAndREADME(String inputRootPath, String outputRootPath, Meta meta) throws IOException, TemplateException {
+    protected void doPomAndREADME(String inputRootPath, String outputRootPath, Meta meta) throws IOException, TemplateException, freemarker.template.TemplateException {
         String outputFilePath;
         String inputFilePath;
         // 生成pom.xml文件
@@ -108,7 +110,7 @@ public abstract class MainGeneratorTemplate {
         DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
     }
 
-    protected void doMainFile(String inputRootPath, String outputBasePackagePath, Meta meta) throws IOException, TemplateException {
+    protected void doMainFile(String inputRootPath, String outputBasePackagePath, Meta meta) throws IOException, TemplateException, freemarker.template.TemplateException {
         String inputFilePath;
         String outputFilePath;
         // 生成 Main 文件
@@ -117,7 +119,7 @@ public abstract class MainGeneratorTemplate {
         DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
     }
 
-    protected void doModelDir(String inputRootPath, String outputBasePackagePath, Meta meta) throws IOException, TemplateException {
+    protected void doModelDir(String inputRootPath, String outputBasePackagePath, Meta meta) throws IOException, TemplateException, freemarker.template.TemplateException {
         String inputFilePath;
         String outputFilePath;
         // 生成 DataModel 文件
@@ -126,7 +128,7 @@ public abstract class MainGeneratorTemplate {
         DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
     }
 
-    protected void doGeneratorDir(String inputRootPath, String outputBasePackagePath, Meta meta) throws IOException, TemplateException {
+    protected void doGeneratorDir(String inputRootPath, String outputBasePackagePath, Meta meta) throws IOException, TemplateException, freemarker.template.TemplateException {
         String outputFilePath;
         String inputFilePath;
         // 生成 StaticFileGenerator 文件
@@ -143,7 +145,7 @@ public abstract class MainGeneratorTemplate {
         DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
     }
 
-    protected void doCliDir(String inputRootPath, String outputBasePackagePath, Meta meta) throws IOException, TemplateException {
+    protected void doCliDir(String inputRootPath, String outputBasePackagePath, Meta meta) throws IOException, TemplateException, freemarker.template.TemplateException {
         String inputFilePath;
         String outputFilePath;
         // 生成 ConfigCommand 文件

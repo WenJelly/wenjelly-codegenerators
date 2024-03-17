@@ -14,12 +14,11 @@ public class Test {
 
     public static void main(String[] args) {
 
-        String property = System.getProperty("user.dir");
-        String path = property + File.separator + ".output/nihao";
-
-        String text = "hello";
-
-        FileUtil.writeUtf8String(text, path);
+        // 输入路径
+        String fileInputPath = "src/main/java/com/wenjelly/acm/MainTemplate.java";
+        // 输出路径
+        String fileOutputPath = fileInputPath + ".ftl";
+        System.out.println(fileOutputPath);
 
     }
 
