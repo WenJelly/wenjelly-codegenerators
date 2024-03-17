@@ -17,6 +17,10 @@ import cn.hutool.json.JSONUtil;
 import com.wenjelly.makerplus.meta.Meta;
 import com.wenjelly.makerplus.meta.enums.FileGenerateTypeEnum;
 import com.wenjelly.makerplus.meta.enums.FileTypeEnum;
+import com.wenjelly.makerplus.template.enums.FileFilterRangeEnum;
+import com.wenjelly.makerplus.template.enums.FileFilterRuleEnum;
+import com.wenjelly.makerplus.template.model.FileFilterConfig;
+import com.wenjelly.makerplus.template.model.TemplateMakerFileConfig;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -66,11 +70,26 @@ public class TemplateMaker {
         fileInfo.setType(FileTypeEnum.FILE.getValue());
         fileInfo.setGenerateType(FileGenerateTypeEnum.DYNAMIC.getValue());
 
-        makeTemplate(newMeta, 1769260326287155200L, modelInfo, fileInputPathList, originProjectPath, "GenerateCommand");
+        TemplateMakerFileConfig templateMakerFileConfig = new TemplateMakerFileConfig();
+        ArrayList<TemplateMakerFileConfig.FileInfoConfig> fileInfoConfigs = new ArrayList<>();
+        TemplateMakerFileConfig.FileInfoConfig fileInfoConfig = new TemplateMakerFileConfig.FileInfoConfig();
+        fileInfoConfig.setPath(fileInputPath);
+        FileFilterConfig fileFilterConfig = FileFilterConfig.builder()
+                .range(FileFilterRangeEnum.FILE_NAME.getValue())
+                .rule(FileFilterRuleEnum.CONTAINS.getValue())
+                .value("Command").build();
+        ArrayList<FileFilterConfig> fileFilterConfigs = new ArrayList<>();
+        fileFilterConfigs.add(fileFilterConfig);
+        fileInfoConfig.setFilterConfigList(fileFilterConfigs);
+        fileInfoConfigs.add(fileInfoConfig);
+        templateMakerFileConfig.setFiles(fileInfoConfigs);
+
+
+        makeTemplate(newMeta, null, modelInfo, templateMakerFileConfig, originProjectPath, "GenerateCommand");
     }
 
 
-    public static long makeTemplate(Meta newMeta, Long id, Meta.ModelConfigBean.ModelInfo modelInfo, List<String> fileInputPathList, String originProjectPath, String searchStr) {
+    public static long makeTemplate(Meta newMeta, Long id, Meta.ModelConfigBean.ModelInfo modelInfo, TemplateMakerFileConfig templateMakerFileConfig, String originProjectPath, String searchStr) {
 
         // 没有id，则生成
         if (id == null) {
@@ -94,10 +113,27 @@ public class TemplateMaker {
         // 注意 win 系统需要对路径进行转义
         sourceRootPath = sourceRootPath.replace("\\", "/");
 
-        // 二、字符串替换，将sum：替换为 ${outputText}，并生成ftl文件
+        // 先从templateMakerFileConfig里面获得所有文件的信息
+        List<TemplateMakerFileConfig.FileInfoConfig> files = templateMakerFileConfig.getFiles();
+        ArrayList<String> fileInputPathList = new ArrayList<>();
+        for (TemplateMakerFileConfig.FileInfoConfig fileInfoConfig : files) {
+            String filePath = fileInfoConfig.getPath();
+            List<FileFilterConfig> filterConfigList = fileInfoConfig.getFilterConfigList();
+            // 如果是相对路径，需要修改成绝对路径
+            if (!filePath.startsWith(sourceRootPath)) {
+                filePath = sourceRootPath + File.separator + filePath;
+            }
+            // 对文件进行过滤
+            List<File> files1 = FileFilter.doFilter(filePath, filterConfigList);
+            for (File file : files1) {
+                String fileInputAbsolutePath = file.getAbsolutePath();
+                fileInputPathList.add(fileInputAbsolutePath);
+            }
+        }
+
+        // 二、字符串替换，将sum：替换为 ${ftl.name}，并生成ftl文件
         ArrayList<Meta.FileConfigBean.FileInfo> fileInfoList = new ArrayList<>();
-        for (String fileInputPath :fileInputPathList) {
-            String fileInputAbsolutePath = sourceRootPath + File.separator + fileInputPath;
+        for (String fileInputAbsolutePath : fileInputPathList) {
             if (FileUtil.isDirectory(fileInputAbsolutePath)) {
                 // 如果file是文件夹
                 List<File> fileList = FileUtil.loopFiles(fileInputAbsolutePath);
