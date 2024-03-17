@@ -9,16 +9,20 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 
 import java.io.File;
+import java.util.List;
 
 public class Test {
 
     public static void main(String[] args) {
 
-        // 输入路径
-        String fileInputPath = "src/main/java/com/wenjelly/acm/MainTemplate.java";
-        // 输出路径
-        String fileOutputPath = fileInputPath + ".ftl";
-        System.out.println(fileOutputPath);
+        String path = System.getProperty("user.dir");
+
+
+        List<File> files = FileUtil.loopFiles(path);
+        for (File file :files) {
+            System.out.println(file.getName());
+        }
+
 
     }
 
