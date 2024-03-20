@@ -346,7 +346,7 @@ public class TemplateMaker {
         String fileInputPath = fileInputAbsolutePath.replace(sourceRootPath + "/", "");
         String fileOutputPath = fileInputPath + ".ftl";
 
-        String fileContent = null;
+        String fileContent;
         // 判断模板是否重复，如果有重复，说明需要再次挖坑
         if (FileUtil.exist(fileOutputAbsolutePath)) {
             // 说明已经生成过一次模板，直接读取最新的模板
