@@ -1,0 +1,20 @@
+{
+  "id": 1,
+  "newMeta": {
+    "name": "spring-boot-generator",
+    "description": "spring-boot生成器",
+    "basePackage": "com.wenjelly",
+    "version": "1.0",
+    "author": "WenJelly",
+    "createTime": "2024-3-21",
+    "fileConfig": {
+    },
+    "modelConfig": {
+    }
+  },
+  "templateMakerModelConfig": {
+  },
+  "templateMakerFileConfig": {
+  },
+  "originProjectPath": "D:\\Development\\IDEAJavaProjects\\wenjelly-generators\\wenjelly-generator-code-repositories\\springboot-init"
+}

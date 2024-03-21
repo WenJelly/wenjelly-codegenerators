@@ -20,5 +20,6 @@ public class TemplateMakerConfig {
     private Meta newMeta;
     private TemplateMakerModelConfig templateMakerModelConfig =new TemplateMakerModelConfig();
     private TemplateMakerFileConfig templateMakerFileConfig = new TemplateMakerFileConfig();
+    private TemplateMakerOutputConfig templateMakerOutputConfig = new TemplateMakerOutputConfig();
     private String originProjectPath;
 }

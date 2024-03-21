@@ -12,18 +12,15 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
+import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+
 import cn.hutool.json.JSONUtil;
 import com.wenjelly.makerplus.meta.Meta;
 import com.wenjelly.makerplus.meta.enums.FileGenerateTypeEnum;
 import com.wenjelly.makerplus.meta.enums.FileTypeEnum;
-import com.wenjelly.makerplus.template.enums.FileFilterRangeEnum;
-import com.wenjelly.makerplus.template.enums.FileFilterRuleEnum;
-import com.wenjelly.makerplus.template.model.FileFilterConfig;
-import com.wenjelly.makerplus.template.model.TemplateMakerConfig;
-import com.wenjelly.makerplus.template.model.TemplateMakerFileConfig;
-import com.wenjelly.makerplus.template.model.TemplateMakerModelConfig;
+import com.wenjelly.makerplus.template.model.*;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -33,98 +30,22 @@ import java.util.stream.Collectors;
 public class TemplateMaker {
 
     public static void main(String[] args) {
-        // 指定项目原始路径
-        String property = System.getProperty("user.dir");
-        // 制作一个文件模板
-//        String originProjectPath = new File(property).getParent() + File.separator + "wenjelly-generator-code-repositories/acm-template";
-        // 制作一整个目录模板
-        String originProjectPath = new File(property).getParent() + File.separator + "wenjelly-generator-maker-plus/src";
 
-        Meta newMeta = new Meta();
-        // 一、输入信息
-        // 1.基本文件信息
-        String name = "acm-template";
-        String description = "ACM示例模板生成器";
-        String version = "1.0";
-        String author = "wenjelly";
+        // 第读取配置文件
+        String springBootMeta = ResourceUtil.readUtf8Str("springbootmeta.json");
+        // 将配置文件转换成对象
+        TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
+        long l = makeTemplate(templateMakerConfig);
 
-        newMeta.setName(name);
-        newMeta.setDescription(description);
-        newMeta.setVersion(version);
-        newMeta.setAuthor(author);
+        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta1.json");
+        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
+        l = makeTemplate(templateMakerConfig);
 
+        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta2.json");
+        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
+        System.out.println(templateMakerConfig);
+        l = makeTemplate(templateMakerConfig);
 
-        // 输入路径
-        String fileInputPath = "main";
-        ArrayList<String> fileInputPathList = new ArrayList<>();
-        fileInputPathList.add(fileInputPath);
-
-        // 3.输入模型参数信息（新信息）
-        Meta.ModelConfigBean.ModelInfo modelInfo = new Meta.ModelConfigBean.ModelInfo();
-        modelInfo.setFieldName("outputText");
-        modelInfo.setType("String");
-        modelInfo.setDescription("作者");
-        modelInfo.setDefaultValue("Sum: ");
-
-        // 4.输入文件参数信息（新信息）
-        Meta.FileConfigBean.FileInfo fileInfo = new Meta.FileConfigBean.FileInfo();
-        fileInfo.setInputPath(fileInputPath);
-        fileInfo.setType(FileTypeEnum.FILE.getValue());
-        fileInfo.setGenerateType(FileGenerateTypeEnum.DYNAMIC.getValue());
-
-        TemplateMakerFileConfig templateMakerFileConfig = new TemplateMakerFileConfig();
-        ArrayList<TemplateMakerFileConfig.FileInfoConfig> fileInfoConfigs = new ArrayList<>();
-        TemplateMakerFileConfig.FileInfoConfig fileInfoConfig = new TemplateMakerFileConfig.FileInfoConfig();
-        fileInfoConfig.setPath(fileInputPath);
-        FileFilterConfig fileFilterConfig = FileFilterConfig.builder()
-                .range(FileFilterRangeEnum.FILE_NAME.getValue())
-                .rule(FileFilterRuleEnum.CONTAINS.getValue())
-                .value("Command").build();
-        ArrayList<FileFilterConfig> fileFilterConfigs = new ArrayList<>();
-        fileFilterConfigs.add(fileFilterConfig);
-        fileInfoConfig.setFilterConfigList(fileFilterConfigs);
-        fileInfoConfigs.add(fileInfoConfig);
-        templateMakerFileConfig.setFiles(fileInfoConfigs);
-
-        // 设置文件组
-        TemplateMakerFileConfig.FileGroupConfig fileGroupConfig = new TemplateMakerFileConfig.FileGroupConfig();
-        fileGroupConfig.setCondition("test");
-        fileGroupConfig.setGroupKey("output");
-        fileGroupConfig.setGroupName("测试分组");
-
-        templateMakerFileConfig.setFileGroupConfig(fileGroupConfig);
-
-        TemplateMakerModelConfig templateMakerModelConfig = new TemplateMakerModelConfig();
-        // - 模型组配置
-        TemplateMakerModelConfig.ModelGroupConfig modelGroupConfig = new TemplateMakerModelConfig.ModelGroupConfig();
-        modelGroupConfig.setGroupKey("mysql");
-        modelGroupConfig.setGroupName("数据库配置");
-        templateMakerModelConfig.setModelGroupConfig(modelGroupConfig);
-
-        // - 模型配置
-        TemplateMakerModelConfig.ModelInfoConfig modelInfoConfig1 = new TemplateMakerModelConfig.ModelInfoConfig();
-        modelInfoConfig1.setFieldName("url");
-        modelInfoConfig1.setType("String");
-        modelInfoConfig1.setDefaultValue("jdbc:mysql://localhost:3306/my_db");
-        modelInfoConfig1.setReplaceText("jdbc:mysql://localhost:3306/my_db");
-
-        TemplateMakerModelConfig.ModelInfoConfig modelInfoConfig2 = new TemplateMakerModelConfig.ModelInfoConfig();
-        modelInfoConfig2.setFieldName("username");
-        modelInfoConfig2.setType("String");
-        modelInfoConfig2.setDefaultValue("root");
-        modelInfoConfig2.setReplaceText("root");
-
-        List<TemplateMakerModelConfig.ModelInfoConfig> modelInfoConfigList = Arrays.asList(modelInfoConfig1, modelInfoConfig2);
-        templateMakerModelConfig.setModels(modelInfoConfigList);
-
-        TemplateMakerConfig templateMakerConfig = new TemplateMakerConfig();
-        templateMakerConfig.setId(1770339206246813696L);
-        templateMakerConfig.setNewMeta(newMeta);
-        templateMakerConfig.setTemplateMakerModelConfig(templateMakerModelConfig);
-        templateMakerConfig.setTemplateMakerFileConfig(templateMakerFileConfig);
-        templateMakerConfig.setOriginProjectPath(originProjectPath);
-
-        makeTemplate(templateMakerConfig);
     }
 
     /**
@@ -141,9 +62,10 @@ public class TemplateMaker {
         TemplateMakerModelConfig templateMakerModelConfig = templateMakerConfig.getTemplateMakerModelConfig();
         TemplateMakerFileConfig templateMakerFileConfig = templateMakerConfig.getTemplateMakerFileConfig();
         String originProjectPath = templateMakerConfig.getOriginProjectPath();
+        TemplateMakerOutputConfig templateMakerOutputConfig = templateMakerConfig.getTemplateMakerOutputConfig();
 
         // 调用制作模板方法
-        return makeTemplate(newMeta, id, templateMakerModelConfig, templateMakerFileConfig, originProjectPath);
+        return makeTemplate(newMeta, id, templateMakerModelConfig, templateMakerFileConfig, templateMakerOutputConfig, originProjectPath);
     }
 
 
@@ -157,10 +79,9 @@ public class TemplateMaker {
      * @param originProjectPath        源文件的路径，用于将源文件复制到工作空间中
      * @return 返回工作空间的id
      */
-    public static long makeTemplate(Meta newMeta, Long id, TemplateMakerModelConfig templateMakerModelConfig, TemplateMakerFileConfig templateMakerFileConfig, String originProjectPath) {
+    public static long makeTemplate(Meta newMeta, Long id, TemplateMakerModelConfig templateMakerModelConfig, TemplateMakerFileConfig templateMakerFileConfig, TemplateMakerOutputConfig templateMakerOutputConfig, String originProjectPath) {
 
-        // 1.创建空间
-        // 没有id，则生成
+        // 创建工作空间
         if (id == null) {
             id = IdUtil.getSnowflakeNextId();
         }
@@ -171,17 +92,115 @@ public class TemplateMaker {
         // 如果文件不存在，则为首次制作，创建工作空间
         if (!FileUtil.exist(templatePath)) {
             FileUtil.mkdir(templatePath);
+            // 将源代码文件复制到工作空间中
             FileUtil.copy(originProjectPath, templatePath, true);
         }
 
-        // 2.得到文件路径集合
         // 得到最后一个雪花id的目录
-        String sourceRootPath = templatePath + File.separator + FileUtil.getLastPathEle(Paths.get(originProjectPath)).toString();
+        // 获取第一个目录时，需要设置层级为 1
+        String sourceRootPath = FileUtil.loopFiles(new File(templatePath), 1, null)
+                .stream()
+                .filter(File::isDirectory)
+                .findFirst()
+                .orElseThrow(RuntimeException::new)
+                .getAbsolutePath();
         // 注意 win 系统需要对路径进行转义
         sourceRootPath = sourceRootPath.replace("\\", "/");
+        // 获取新的模型配置列表
+        ArrayList<Meta.ModelConfigBean.ModelInfo> newModelInfoList = getModelInfoList(templateMakerModelConfig);
+        // 制作文件并获取新的文件配置列表
+        ArrayList<Meta.FileConfigBean.FileInfo> newFileInfoList = getFileInfoList(templateMakerModelConfig, templateMakerFileConfig, sourceRootPath);
 
+        // 生成配置文件
+        makeMetaJson(newMeta, sourceRootPath, newFileInfoList, newModelInfoList, templateMakerOutputConfig);
+        return id;
+    }
+
+    /**
+     * @param newMeta
+     * @param sourceRootPath
+     * @param newFileInfoList
+     * @param newModelInfoList
+     * @return
+     */
+    private static Meta makeMetaJson(Meta newMeta, String sourceRootPath, ArrayList<Meta.FileConfigBean.FileInfo> newFileInfoList, ArrayList<Meta.ModelConfigBean.ModelInfo> newModelInfoList, TemplateMakerOutputConfig templateMakerOutputConfig) {
+        // 5.生成配置文件
+        String metaJsonOutputPath = sourceRootPath + File.separator + "meta.json";
+
+        if (FileUtil.exist(metaJsonOutputPath)) {
+            // meta.json文件存在，说明不是首次生成
+            // 先得到旧的meta.json信息
+            Meta oldMeta = JSONUtil.toBean(FileUtil.readUtf8String(metaJsonOutputPath), Meta.class);
+            // 通过 BeanUtil.copyProperties 复制新对象的属性到老对象（如果属性为空则不复制），从而实现新老 meta 对象的合并。
+            BeanUtil.copyProperties(newMeta, oldMeta, CopyOptions.create().ignoreNullValue());
+            newMeta = oldMeta;
+
+            // 得到原有的文件信息
+            List<Meta.FileConfigBean.FileInfo> newFiles = oldMeta.getFileConfig().getFiles();
+            if (newFiles == null) {
+                newFiles = new ArrayList<>(newFileInfoList);
+            } else {
+                // 将新的文件信息添加至文件列表里
+                newFiles.addAll(newFileInfoList);
+            }
+
+            // 得到原有的模型信息
+            List<Meta.ModelConfigBean.ModelInfo> newModels = oldMeta.getModelConfig().getModels();
+            if (newModels == null) {
+                newModels = new ArrayList<>(newModelInfoList);
+            } else {
+                // 将新的模型信息添加至模型列表里
+                newModels.addAll(newModelInfoList);
+            }
+
+            // 对文件和模型去重
+            newMeta.getFileConfig().setFiles(distinctFiles(newFiles));
+            newMeta.getModelConfig().setModels(distinctModels(newModels));
+        } else {
+            // 1.构造文件参数配置
+            Meta.FileConfigBean fileConfigBean = new Meta.FileConfigBean();
+            fileConfigBean.setSourceRootPath(sourceRootPath);
+            fileConfigBean.setFiles(newFileInfoList);
+            newMeta.setFileConfig(fileConfigBean);
+            // 2.构造模型参数配置
+            Meta.ModelConfigBean modelConfigBean = new Meta.ModelConfigBean();
+            ArrayList<Meta.ModelConfigBean.ModelInfo> modelInfos = new ArrayList<>(newModelInfoList);
+            modelConfigBean.setModels(modelInfos);
+            newMeta.setModelConfig(modelConfigBean);
+        }
+
+        if (templateMakerOutputConfig != null) {
+            if (templateMakerOutputConfig.isRemoveGroupFilesFromRoot()){
+                // 得到现在的meta文件配置信息
+                List<Meta.FileConfigBean.FileInfo> fileInfoList = newMeta.getFileConfig().getFiles();
+                // 内外去重,重新设置
+                newMeta.getFileConfig().setFiles(TemplateMakerUtils.removeGroupFilesFromRoot(fileInfoList));
+            }
+        }
+
+        // 更新元信息配置
+        FileUtil.writeUtf8String(JSONUtil.toJsonPrettyStr(newMeta), metaJsonOutputPath);
+        return newMeta;
+    }
+
+    /**
+     * @param templateMakerModelConfig
+     * @param templateMakerFileConfig
+     * @param sourceRootPath
+     * @return
+     */
+    private static ArrayList<Meta.FileConfigBean.FileInfo> getFileInfoList(TemplateMakerModelConfig templateMakerModelConfig, TemplateMakerFileConfig templateMakerFileConfig, String sourceRootPath) {
+
+        // 本次新增的文件配置列表，用于生成meta.json文件
+        ArrayList<Meta.FileConfigBean.FileInfo> newFileInfoList = new ArrayList<>();
+        if (templateMakerFileConfig == null) {
+            return newFileInfoList;
+        }
         // 先从templateMakerFileConfig里面获得所有文件的信息
         List<TemplateMakerFileConfig.FileInfoConfig> files = templateMakerFileConfig.getFiles();
+        if (files == null) {
+            return newFileInfoList;
+        }
         // 用于收集满足条件的文件路径
         ArrayList<String> fileInputPathList = new ArrayList<>();
         for (TemplateMakerFileConfig.FileInfoConfig fileInfoConfig : files) {
@@ -202,40 +221,6 @@ public class TemplateMaker {
             }
         }
 
-        // 3.处理模型信息
-        List<TemplateMakerModelConfig.ModelInfoConfig> models = templateMakerModelConfig.getModels();
-        // 转化为配置接受的模型列表
-        List<Meta.ModelConfigBean.ModelInfo> inputModelInfoList = models.stream().map(modelInfoConfig -> {
-            Meta.ModelConfigBean.ModelInfo modelInfo = new Meta.ModelConfigBean.ModelInfo();
-            // 将第一个参数的属性拷贝给第二个参数的属性，拷贝条件是第二个参数有一个或多个属性与第一个参数相同。
-            BeanUtil.copyProperties(modelInfoConfig, modelInfo);
-            return modelInfo;
-        }).collect(Collectors.toList());
-
-        // 本次新增的模型配置列表，用于生成meta.json文件
-        ArrayList<Meta.ModelConfigBean.ModelInfo> newModelInfoList = new ArrayList<>();
-        TemplateMakerModelConfig.ModelGroupConfig modelGroupConfig = templateMakerModelConfig.getModelGroupConfig();
-        // 先判断是否是一个模型组
-        if (modelGroupConfig != null) {
-
-            // 如果是模型组的话，就先创建一个模型组，然后将模型列表添加到模型组里，最后再将模型组天加到模型配置列表里
-            String groupKey = modelGroupConfig.getGroupKey();
-            String groupName = modelGroupConfig.getGroupName();
-            String condition = modelGroupConfig.getCondition();
-            // 1.创建一个模型组
-            Meta.ModelConfigBean.ModelInfo groupModelInfo = new Meta.ModelConfigBean.ModelInfo();
-            groupModelInfo.setGroupKey(groupKey);
-            groupModelInfo.setGroupName(groupName);
-            groupModelInfo.setCondition(condition);
-            // 2.将模型列表添加到模型组里
-            groupModelInfo.setModels(inputModelInfoList);
-            // 3.将模型组天加到模型配置列表里
-            newModelInfoList.add(groupModelInfo);
-        } else {
-            // 如果不是模型组，直接将所有的模型列表添加到模型配置列表里面
-            newModelInfoList.addAll(inputModelInfoList);
-        }
-
         // 4.处理文件信息，制作模板，替换字符，生成.ftl模板
         ArrayList<Meta.FileConfigBean.FileInfo> fileInfoList = new ArrayList<>();
         for (String fileInputAbsolutePath : fileInputPathList) {
@@ -253,9 +238,6 @@ public class TemplateMaker {
                 fileInfoList.add(makedFileInfo);
             }
         }
-
-        // 本次新增的文件配置列表，用于生成meta.json文件
-        ArrayList<Meta.FileConfigBean.FileInfo> newFileInfoList = new ArrayList<>();
         // 得到文件组信息
         TemplateMakerFileConfig.FileGroupConfig fileGroupConfig = templateMakerFileConfig.getFileGroupConfig();
         // 先判断是否是一个文件组
@@ -279,46 +261,56 @@ public class TemplateMaker {
             // 如果不是文件组，直接将所有的文件列表添加到文件配置列表里面
             newFileInfoList.addAll(fileInfoList);
         }
+        return newFileInfoList;
+    }
 
-        // 5.生成配置文件
-        String metaJsonOutputPath = sourceRootPath + File.separator + "meta.json";
+    /**
+     * @param templateMakerModelConfig
+     * @return
+     */
+    private static ArrayList<Meta.ModelConfigBean.ModelInfo> getModelInfoList(TemplateMakerModelConfig templateMakerModelConfig) {
 
-        if (FileUtil.exist(metaJsonOutputPath)) {
-            // meta.json文件存在，说明不是首次生成
-            // 先得到旧的meta.json信息
-            Meta oldMeta = JSONUtil.toBean(FileUtil.readUtf8String(metaJsonOutputPath), Meta.class);
-            // 通过 BeanUtil.copyProperties 复制新对象的属性到老对象（如果属性为空则不复制），从而实现新老 meta 对象的合并。
-            BeanUtil.copyProperties(newMeta, oldMeta, CopyOptions.create().ignoreNullValue());
-            newMeta = oldMeta;
-
-            // 得到原有的文件信息
-            List<Meta.FileConfigBean.FileInfo> newFiles = oldMeta.getFileConfig().getFiles();
-            // 将新的文件信息添加至文件列表里
-            newFiles.addAll(newFileInfoList);
-
-            // 得到原有的模型信息
-            List<Meta.ModelConfigBean.ModelInfo> newModels = oldMeta.getModelConfig().getModels();
-            // 将新的模型信息添加至模型列表里
-            newModels.addAll(newModelInfoList);
-
-            // 对文件和模型去重
-            newMeta.getFileConfig().setFiles(distinctFiles(newFiles));
-            newMeta.getModelConfig().setModels(distinctModels(newModels));
-        } else {
-            // 1.构造文件参数配置
-            Meta.FileConfigBean fileConfigBean = new Meta.FileConfigBean();
-            fileConfigBean.setSourceRootPath(sourceRootPath);
-            fileConfigBean.setFiles(newFileInfoList);
-            newMeta.setFileConfig(fileConfigBean);
-            // 2.构造模型参数配置
-            Meta.ModelConfigBean modelConfigBean = new Meta.ModelConfigBean();
-            ArrayList<Meta.ModelConfigBean.ModelInfo> modelInfos = new ArrayList<>(newModelInfoList);
-            modelConfigBean.setModels(modelInfos);
-            newMeta.setModelConfig(modelConfigBean);
+        // 本次新增的模型配置列表，用于生成meta.json文件
+        ArrayList<Meta.ModelConfigBean.ModelInfo> newModelInfoList = new ArrayList<>();
+        if (templateMakerModelConfig == null) {
+            return newModelInfoList;
         }
-        // 更新元信息配置
-        FileUtil.writeUtf8String(JSONUtil.toJsonPrettyStr(newMeta), metaJsonOutputPath);
-        return id;
+        // 3.处理模型信息
+        List<TemplateMakerModelConfig.ModelInfoConfig> models = templateMakerModelConfig.getModels();
+        if (models == null) {
+            return newModelInfoList;
+        }
+
+        // 转化为配置接受的模型列表
+        List<Meta.ModelConfigBean.ModelInfo> inputModelInfoList = models.stream().map(modelInfoConfig -> {
+            Meta.ModelConfigBean.ModelInfo modelInfo = new Meta.ModelConfigBean.ModelInfo();
+            // 将第一个参数的属性拷贝给第二个参数的属性，拷贝条件是第二个参数有一个或多个属性与第一个参数相同。
+            BeanUtil.copyProperties(modelInfoConfig, modelInfo);
+            return modelInfo;
+        }).collect(Collectors.toList());
+
+        TemplateMakerModelConfig.ModelGroupConfig modelGroupConfig = templateMakerModelConfig.getModelGroupConfig();
+        // 先判断是否是一个模型组
+        if (modelGroupConfig != null) {
+
+            // 如果是模型组的话，就先创建一个模型组，然后将模型列表添加到模型组里，最后再将模型组天加到模型配置列表里
+            String groupKey = modelGroupConfig.getGroupKey();
+            String groupName = modelGroupConfig.getGroupName();
+            String condition = modelGroupConfig.getCondition();
+            // 1.创建一个模型组
+            Meta.ModelConfigBean.ModelInfo groupModelInfo = new Meta.ModelConfigBean.ModelInfo();
+            groupModelInfo.setGroupKey(groupKey);
+            groupModelInfo.setGroupName(groupName);
+            groupModelInfo.setCondition(condition);
+            // 2.将模型列表添加到模型组里
+            groupModelInfo.setModels(inputModelInfoList);
+            // 3.将模型组天加到模型配置列表里
+            newModelInfoList.add(groupModelInfo);
+        } else {
+            // 如果不是模型组，直接将所有的模型列表添加到模型配置列表里面
+            newModelInfoList.addAll(inputModelInfoList);
+        }
+        return newModelInfoList;
     }
 
     /**
@@ -333,7 +325,8 @@ public class TemplateMaker {
 
         String fileInputAbsolutePath;
         // 先判断文件是否是以.ftl结尾，如果是，则为再制作
-        if ("ftl".equals(FileNameUtil.getSuffix(inputFile))) {
+        boolean again = "ftl".equals(FileNameUtil.getSuffix(inputFile));
+        if (again) {
             fileInputAbsolutePath = inputFile.getAbsolutePath().replace("\\", "/").replace(".ftl", "");
         } else {
             fileInputAbsolutePath = inputFile.getAbsolutePath().replace("\\", "/");
@@ -380,7 +373,12 @@ public class TemplateMaker {
         fileInfo.setInputPath(fileOutputPath);
         fileInfo.setOutputPath(fileInputPath);
         fileInfo.setType(FileTypeEnum.FILE.getValue());
-        fileInfo.setGenerateType(FileGenerateTypeEnum.DYNAMIC.getValue());
+
+        if (!again && newFileContent.equals(fileContent)) {
+            fileInfo.setGenerateType(FileGenerateTypeEnum.STATIC.getValue());
+        } else {
+            fileInfo.setGenerateType(FileGenerateTypeEnum.DYNAMIC.getValue());
+        }
 
         return fileInfo;
     }
