@@ -43,6 +43,11 @@ public class TemplateMaker {
 
         springBootMeta = ResourceUtil.readUtf8Str("springbootmeta2.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
+        l = makeTemplate(templateMakerConfig);
+
+
+        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta3.json");
+        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
         System.out.println(templateMakerConfig);
         l = makeTemplate(templateMakerConfig);
 
@@ -110,7 +115,6 @@ public class TemplateMaker {
         ArrayList<Meta.ModelConfigBean.ModelInfo> newModelInfoList = getModelInfoList(templateMakerModelConfig);
         // 制作文件并获取新的文件配置列表
         ArrayList<Meta.FileConfigBean.FileInfo> newFileInfoList = getFileInfoList(templateMakerModelConfig, templateMakerFileConfig, sourceRootPath);
-
         // 生成配置文件
         makeMetaJson(newMeta, sourceRootPath, newFileInfoList, newModelInfoList, templateMakerOutputConfig);
         return id;
@@ -170,7 +174,7 @@ public class TemplateMaker {
         }
 
         if (templateMakerOutputConfig != null) {
-            if (templateMakerOutputConfig.isRemoveGroupFilesFromRoot()){
+            if (templateMakerOutputConfig.isRemoveGroupFilesFromRoot()) {
                 // 得到现在的meta文件配置信息
                 List<Meta.FileConfigBean.FileInfo> fileInfoList = newMeta.getFileConfig().getFiles();
                 // 内外去重,重新设置
@@ -201,9 +205,11 @@ public class TemplateMaker {
         if (files == null) {
             return newFileInfoList;
         }
-        // 用于收集满足条件的文件路径
-        ArrayList<String> fileInputPathList = new ArrayList<>();
+
+        // 4.处理文件信息，制作模板，替换字符，生成.ftl模板
+        ArrayList<Meta.FileConfigBean.FileInfo> fileInfoList = new ArrayList<>();
         for (TemplateMakerFileConfig.FileInfoConfig fileInfoConfig : files) {
+
             // 文件路径
             String filePath = fileInfoConfig.getPath();
             // 文件的过滤条件集合
@@ -214,30 +220,41 @@ public class TemplateMaker {
             }
             // 对文件进行过滤
             List<File> filteredFiles = FileFilter.doFilter(filePath, filterConfigList);
-            // 将满足过滤条件的文件路径收集起来
-            for (File file : filteredFiles) {
-                String fileInputAbsolutePath = file.getAbsolutePath();
-                fileInputPathList.add(fileInputAbsolutePath);
-            }
-        }
 
-        // 4.处理文件信息，制作模板，替换字符，生成.ftl模板
-        ArrayList<Meta.FileConfigBean.FileInfo> fileInfoList = new ArrayList<>();
-        for (String fileInputAbsolutePath : fileInputPathList) {
-            if (FileUtil.isDirectory(fileInputAbsolutePath)) {
-                // 如果file是文件夹，遍历得到文件列表
-                List<File> fileList = FileUtil.loopFiles(fileInputAbsolutePath);
-                for (File file : fileList) {
-                    // 制作.ftl文件，即挖坑
-                    Meta.FileConfigBean.FileInfo makedFileInfo = makeFileTemplate(file, sourceRootPath, templateMakerModelConfig);
+            for (File filteredFile : filteredFiles) {
+                String fileInputAbsolutePath = filteredFile.getAbsolutePath();
+                if (FileUtil.isDirectory(fileInputAbsolutePath)) {
+                    // 如果file是文件夹，遍历得到文件列表
+                    List<File> fileList = FileUtil.loopFiles(fileInputAbsolutePath);
+                    for (File file : fileList) {
+                        // 制作.ftl文件，即挖坑
+                        Meta.FileConfigBean.FileInfo makedFileInfo = makeFileTemplate(file, sourceRootPath, templateMakerModelConfig, fileInfoConfig);
+                        fileInfoList.add(makedFileInfo);
+                    }
+                } else {
+                    // 如果file是单个文件，则直接进行制作即可
+                    Meta.FileConfigBean.FileInfo makedFileInfo = makeFileTemplate(new File(fileInputAbsolutePath), sourceRootPath, templateMakerModelConfig, fileInfoConfig);
                     fileInfoList.add(makedFileInfo);
                 }
-            } else {
-                // 如果file是单个文件，则直接进行制作即可
-                Meta.FileConfigBean.FileInfo makedFileInfo = makeFileTemplate(new File(fileInputAbsolutePath), sourceRootPath, templateMakerModelConfig);
-                fileInfoList.add(makedFileInfo);
             }
+
+
         }
+//        for (String fileInputAbsolutePath : fileInputPathList) {
+//            if (FileUtil.isDirectory(fileInputAbsolutePath)) {
+//                // 如果file是文件夹，遍历得到文件列表
+//                List<File> fileList = FileUtil.loopFiles(fileInputAbsolutePath);
+//                for (File file : fileList) {
+//                    // 制作.ftl文件，即挖坑
+//                    Meta.FileConfigBean.FileInfo makedFileInfo = makeFileTemplate(file, sourceRootPath, templateMakerModelConfig);
+//                    fileInfoList.add(makedFileInfo);
+//                }
+//            } else {
+//                // 如果file是单个文件，则直接进行制作即可
+//                Meta.FileConfigBean.FileInfo makedFileInfo = makeFileTemplate(new File(fileInputAbsolutePath), sourceRootPath, templateMakerModelConfig);
+//                fileInfoList.add(makedFileInfo);
+//            }
+//        }
         // 得到文件组信息
         TemplateMakerFileConfig.FileGroupConfig fileGroupConfig = templateMakerFileConfig.getFileGroupConfig();
         // 先判断是否是一个文件组
@@ -321,7 +338,7 @@ public class TemplateMaker {
      * @param templateMakerModelConfig 模板制作模型配置，里面包含了模型组信息，需要替换的字符串
      * @return 返回FileInfo类型，用于创建meta.json文件
      */
-    public static Meta.FileConfigBean.FileInfo makeFileTemplate(File inputFile, String sourceRootPath, TemplateMakerModelConfig templateMakerModelConfig) {
+    public static Meta.FileConfigBean.FileInfo makeFileTemplate(File inputFile, String sourceRootPath, TemplateMakerModelConfig templateMakerModelConfig, TemplateMakerFileConfig.FileInfoConfig fileInfoConfig) {
 
         String fileInputAbsolutePath;
         // 先判断文件是否是以.ftl结尾，如果是，则为再制作
@@ -372,6 +389,7 @@ public class TemplateMaker {
         Meta.FileConfigBean.FileInfo fileInfo = new Meta.FileConfigBean.FileInfo();
         fileInfo.setInputPath(fileOutputPath);
         fileInfo.setOutputPath(fileInputPath);
+        fileInfo.setCondition(fileInfoConfig.getCondition());
         fileInfo.setType(FileTypeEnum.FILE.getValue());
 
         if (!again && newFileContent.equals(fileContent)) {
