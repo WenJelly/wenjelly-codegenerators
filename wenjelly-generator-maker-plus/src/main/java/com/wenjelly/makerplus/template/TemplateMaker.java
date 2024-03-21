@@ -23,7 +23,6 @@ import com.wenjelly.makerplus.meta.enums.FileTypeEnum;
 import com.wenjelly.makerplus.template.model.*;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,24 +31,38 @@ public class TemplateMaker {
     public static void main(String[] args) {
 
         // 第读取配置文件
-        String springBootMeta = ResourceUtil.readUtf8Str("springbootmeta.json");
+        String springBootMeta = ResourceUtil.readUtf8Str("springbootmeta1.json");
         // 将配置文件转换成对象
         TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
         long l = makeTemplate(templateMakerConfig);
-
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta1.json");
-        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        l = makeTemplate(templateMakerConfig);
 
         springBootMeta = ResourceUtil.readUtf8Str("springbootmeta2.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
         l = makeTemplate(templateMakerConfig);
 
-
         springBootMeta = ResourceUtil.readUtf8Str("springbootmeta3.json");
+        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
+        l = makeTemplate(templateMakerConfig);
+
+
+        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta4.json");
+        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
+        l = makeTemplate(templateMakerConfig);
+
+        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta5.json");
+        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
+        l = makeTemplate(templateMakerConfig);
+
+        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta6.json");
+        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
+        l = makeTemplate(templateMakerConfig);
+
+        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta7.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
         System.out.println(templateMakerConfig);
         l = makeTemplate(templateMakerConfig);
+
+        System.out.println(l);
 
     }
 
@@ -68,18 +81,16 @@ public class TemplateMaker {
         TemplateMakerFileConfig templateMakerFileConfig = templateMakerConfig.getTemplateMakerFileConfig();
         String originProjectPath = templateMakerConfig.getOriginProjectPath();
         TemplateMakerOutputConfig templateMakerOutputConfig = templateMakerConfig.getTemplateMakerOutputConfig();
-
         // 调用制作模板方法
         return makeTemplate(newMeta, id, templateMakerModelConfig, templateMakerFileConfig, templateMakerOutputConfig, originProjectPath);
     }
-
 
     /**
      * 制作模板
      *
      * @param newMeta                  新的元信息文件，里面包含文件信息，模组信息
      * @param id                       工作空间的id，用于查看当前状态
-     * @param templateMakerModelConfig 模板制作模型配置，里面包含了模型组信息，需要替换的字符串
+     * @param templateMakerModelConfig 模型制作模型配置，里面包含了模型组信息，需要替换的字符串
      * @param templateMakerFileConfig  文件制作模板配置，里面包含了文件的路径，过滤条件，文件组等信息
      * @param originProjectPath        源文件的路径，用于将源文件复制到工作空间中
      * @return 返回工作空间的id
@@ -121,11 +132,13 @@ public class TemplateMaker {
     }
 
     /**
-     * @param newMeta
-     * @param sourceRootPath
-     * @param newFileInfoList
-     * @param newModelInfoList
-     * @return
+     * 制作meta.json配置文件
+     *
+     * @param newMeta          新的元信息文件，里面包含文件信息，模组信息
+     * @param sourceRootPath   需要生成代码的根路径
+     * @param newFileInfoList  新文件配置信息列表，用于更新
+     * @param newModelInfoList 新模型配置信息列表，用于更新
+     * @return 返回新的元信息文件
      */
     private static Meta makeMetaJson(Meta newMeta, String sourceRootPath, ArrayList<Meta.FileConfigBean.FileInfo> newFileInfoList, ArrayList<Meta.ModelConfigBean.ModelInfo> newModelInfoList, TemplateMakerOutputConfig templateMakerOutputConfig) {
         // 5.生成配置文件
@@ -188,10 +201,12 @@ public class TemplateMaker {
     }
 
     /**
-     * @param templateMakerModelConfig
-     * @param templateMakerFileConfig
-     * @param sourceRootPath
-     * @return
+     * 处理文件操作
+     *
+     * @param templateMakerModelConfig 模型制作模型配置，里面包含了模型组信息，需要替换的字符串
+     * @param templateMakerFileConfig  文件制作模板配置，里面包含了文件的路径，过滤条件，文件组等信息
+     * @param sourceRootPath           需要生成代码的根路径
+     * @return 返回一个用于更新的FileInfoList
      */
     private static ArrayList<Meta.FileConfigBean.FileInfo> getFileInfoList(TemplateMakerModelConfig templateMakerModelConfig, TemplateMakerFileConfig templateMakerFileConfig, String sourceRootPath) {
 
@@ -240,36 +255,14 @@ public class TemplateMaker {
 
 
         }
-//        for (String fileInputAbsolutePath : fileInputPathList) {
-//            if (FileUtil.isDirectory(fileInputAbsolutePath)) {
-//                // 如果file是文件夹，遍历得到文件列表
-//                List<File> fileList = FileUtil.loopFiles(fileInputAbsolutePath);
-//                for (File file : fileList) {
-//                    // 制作.ftl文件，即挖坑
-//                    Meta.FileConfigBean.FileInfo makedFileInfo = makeFileTemplate(file, sourceRootPath, templateMakerModelConfig);
-//                    fileInfoList.add(makedFileInfo);
-//                }
-//            } else {
-//                // 如果file是单个文件，则直接进行制作即可
-//                Meta.FileConfigBean.FileInfo makedFileInfo = makeFileTemplate(new File(fileInputAbsolutePath), sourceRootPath, templateMakerModelConfig);
-//                fileInfoList.add(makedFileInfo);
-//            }
-//        }
         // 得到文件组信息
         TemplateMakerFileConfig.FileGroupConfig fileGroupConfig = templateMakerFileConfig.getFileGroupConfig();
         // 先判断是否是一个文件组
         if (fileGroupConfig != null) {
-
-            // 如果是文件夹组的话，就先创建一个文件组，然后将文件列表添加到文件组里，最后再将文件组天加到文件配置列表里
-            String condition = fileGroupConfig.getCondition();
-            String groupKey = fileGroupConfig.getGroupKey();
-            String groupName = fileGroupConfig.getGroupName();
             // 1.创建文件组并赋值
             Meta.FileConfigBean.FileInfo groupFileInfo = new Meta.FileConfigBean.FileInfo();
             groupFileInfo.setType(FileTypeEnum.GROUP.getValue());
-            groupFileInfo.setGroupKey(groupKey);
-            groupFileInfo.setGroupName(groupName);
-            groupFileInfo.setCondition(condition);
+            BeanUtil.copyProperties(fileGroupConfig, groupFileInfo);
             // 2.将文件列表添加到文件组里
             groupFileInfo.setFiles(fileInfoList);
             // 3.将文件组天加到文件配置列表里
@@ -282,8 +275,10 @@ public class TemplateMaker {
     }
 
     /**
-     * @param templateMakerModelConfig
-     * @return
+     * 处理模型操作
+     *
+     * @param templateMakerModelConfig 模组制作模型配置，里面包含了模型组信息，需要替换的字符串
+     * @return 返回一个用于更新的ModelInfoList
      */
     private static ArrayList<Meta.ModelConfigBean.ModelInfo> getModelInfoList(TemplateMakerModelConfig templateMakerModelConfig) {
 
@@ -310,15 +305,10 @@ public class TemplateMaker {
         // 先判断是否是一个模型组
         if (modelGroupConfig != null) {
 
-            // 如果是模型组的话，就先创建一个模型组，然后将模型列表添加到模型组里，最后再将模型组天加到模型配置列表里
-            String groupKey = modelGroupConfig.getGroupKey();
-            String groupName = modelGroupConfig.getGroupName();
-            String condition = modelGroupConfig.getCondition();
             // 1.创建一个模型组
             Meta.ModelConfigBean.ModelInfo groupModelInfo = new Meta.ModelConfigBean.ModelInfo();
-            groupModelInfo.setGroupKey(groupKey);
-            groupModelInfo.setGroupName(groupName);
-            groupModelInfo.setCondition(condition);
+            BeanUtil.copyProperties(modelGroupConfig, groupModelInfo);
+
             // 2.将模型列表添加到模型组里
             groupModelInfo.setModels(inputModelInfoList);
             // 3.将模型组天加到模型配置列表里
