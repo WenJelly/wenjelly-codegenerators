@@ -8,7 +8,6 @@ package com.wenjelly.maker.cli.command;
  */
 
 
-
 import com.wenjelly.maker.model.DataModel;
 import lombok.Data;
 import picocli.CommandLine;
@@ -38,10 +37,10 @@ public class TestArgGroupCommand implements Callable {
     public Object call() throws Exception {
         System.out.println(needGit);
         System.out.println(loop);
-        if (true){
+        if (true) {
             System.out.println("请输入配置");
             CommandLine commandLine = new CommandLine(MainTemplate.class);
-            commandLine.execute("-o","-a");
+            commandLine.execute("-o", "-a");
             System.out.println(mainTemplate);
         }
         return 0;
@@ -49,7 +48,7 @@ public class TestArgGroupCommand implements Callable {
 
     @Data
     @Command(name = "mainTemplate")
-    static class MainTemplate implements Runnable{
+    static class MainTemplate implements Runnable {
         @Option(names = {"-a", "--author"}, arity = "0..1", interactive = true, prompt = "请输入作者: ", echo = true)
         private String author = "wenjelly";
 

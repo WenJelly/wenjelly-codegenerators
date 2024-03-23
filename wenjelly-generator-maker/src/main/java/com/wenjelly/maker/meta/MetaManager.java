@@ -15,19 +15,19 @@ import cn.hutool.json.JSONUtil;
  */
 public class MetaManager {
 
-    private static volatile  Meta meta;
+    private static volatile Meta meta;
 
-    private  MetaManager() {
+    private MetaManager() {
         // 私有构造函数，防止外部实例化
     }
 
     public static Meta getMetaObject() {
 
-        if(meta == null){
+        if (meta == null) {
             // 加锁
-            synchronized (MetaManager.class){
+            synchronized (MetaManager.class) {
                 // 如果还为空
-                if(meta == null){
+                if (meta == null) {
                     meta = initMeta();
                 }
             }

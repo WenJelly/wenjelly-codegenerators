@@ -20,6 +20,7 @@ public class FileGenerator {
 
     /**
      * 完整生成（静态+动态）
+     *
      * @param args
      */
     public static void main(String[] args) throws TemplateException, IOException {
@@ -43,19 +44,19 @@ public class FileGenerator {
 
         // groupKey = git
         if (needGit) {
-            inputPath = new File(inputRootPath,".gitignore").getAbsolutePath();
-            outputPath = new File(outputRootPath,".gitignore").getAbsolutePath();
+            inputPath = new File(inputRootPath, ".gitignore").getAbsolutePath();
+            outputPath = new File(outputRootPath, ".gitignore").getAbsolutePath();
             // 生成静态文件
-            StaticFileGenerator.copyFileByHuTool(inputPath,outputPath);
+            StaticFileGenerator.copyFileByHuTool(inputPath, outputPath);
         }
         if (needGit) {
-            inputPath = new File(inputRootPath,"README.md").getAbsolutePath();
-            outputPath = new File(outputRootPath,"README.md").getAbsolutePath();
+            inputPath = new File(inputRootPath, "README.md").getAbsolutePath();
+            outputPath = new File(outputRootPath, "README.md").getAbsolutePath();
             // 生成静态文件
-            StaticFileGenerator.copyFileByHuTool(inputPath,outputPath);
+            StaticFileGenerator.copyFileByHuTool(inputPath, outputPath);
         }
-        inputPath = new File(inputRootPath,"src/main/java/com/wenjelly/acm/acmtemplate.java.ftl").getAbsolutePath();
-        outputPath = new File(outputRootPath,"acm-template-generator/src/com/wenjelly/acm/Acmtemplate.java").getAbsolutePath();
+        inputPath = new File(inputRootPath, "src/main/java/com/wenjelly/acm/acmtemplate.java.ftl").getAbsolutePath();
+        outputPath = new File(outputRootPath, "acm-template-generator/src/com/wenjelly/acm/Acmtemplate.java").getAbsolutePath();
         // 生成动态文件
         DynamicFileGenerator.doGenerate(inputPath, outputPath, model);
 

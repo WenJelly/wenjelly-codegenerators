@@ -23,14 +23,14 @@ import java.util.Set;
  */
 public class ScriptGenerator {
 
-    public static void doGenerate(String outputPath , String jarPath) {
+    public static void doGenerate(String outputPath, String jarPath) {
         // 直接写入脚本文件
         // linux
         StringBuilder sb = new StringBuilder();
         sb.append("#!bin/bash").append("\n");
-        sb.append(String.format("java -jar %s \"$@\"",jarPath)).append("\n");
+        sb.append(String.format("java -jar %s \"$@\"", jarPath)).append("\n");
 
-        FileUtil.writeBytes(sb.toString().getBytes(StandardCharsets.UTF_8),outputPath);
+        FileUtil.writeBytes(sb.toString().getBytes(StandardCharsets.UTF_8), outputPath);
 
         // 添加可执行权限，在windows上注释掉，因为会抛操作不支持
 //        Set<PosixFilePermission> permissions  = PosixFilePermissions.fromString("rwxrwxrwx");

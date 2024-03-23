@@ -29,14 +29,14 @@ public class JarGenerator {
         ProcessBuilder processBuilder = new ProcessBuilder(mavenCommand.split(" "));
         processBuilder.directory(new File(projectDir));
 
-        Process process  = processBuilder.start();
+        Process process = processBuilder.start();
 
         // 读取命令的输出
 
         InputStream inputStream = process.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
-        while((line = reader.readLine())!=null) {
+        while ((line = reader.readLine()) != null) {
             System.out.println(line);
         }
 

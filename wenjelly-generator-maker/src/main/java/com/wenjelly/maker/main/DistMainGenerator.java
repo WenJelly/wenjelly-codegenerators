@@ -16,11 +16,6 @@ import java.io.IOException;
 
 public class DistMainGenerator extends MainGeneratorTemplate{
 
-//    @Override
-//    protected void doDistDir(String outputRootPath, String jarPath) {
-//        System.out.println("你好，这是精简方法");
-//    }
-
     @Test
     public void test() throws TemplateException, IOException, InterruptedException {
         super.doGenerator();

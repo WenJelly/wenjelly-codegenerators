@@ -64,16 +64,16 @@ public abstract class MainGeneratorTemplate {
         String shellPath = outputRootPath + File.separator + "generator";
         String outputSourcePath = outputRootPath + File.separator + ".source";
         String distOutputPath = outputRootPath + "-dist";
-        String targetAbsolutePath  = distOutputPath + File.separator + "target";
-        FileUtil.mkdir(targetAbsolutePath );
+        String targetAbsolutePath = distOutputPath + File.separator + "target";
+        FileUtil.mkdir(targetAbsolutePath);
         // 拷贝jar包
         String jarAbsolutePath = outputRootPath + File.separator + jarPath;
-        FileUtil.copy(jarAbsolutePath,targetAbsolutePath,true);
+        FileUtil.copy(jarAbsolutePath, targetAbsolutePath, true);
         // 拷贝脚本程序
         FileUtil.copy(shellPath, distOutputPath, true);
         FileUtil.copy(shellPath + ".bat", distOutputPath, true);
         // 拷贝源码
-        FileUtil.copy(outputSourcePath,distOutputPath,true);
+        FileUtil.copy(outputSourcePath, distOutputPath, true);
     }
 
     protected String doJarAndShell(String outputRootPath, Meta meta) throws IOException, InterruptedException {
@@ -83,7 +83,7 @@ public abstract class MainGeneratorTemplate {
         String shellPath = outputRootPath + File.separator + "generator";
         String jarName = String.format("%s-%s-jar-with-dependencies.jar", meta.getName(), meta.getVersion());
         String jarPath = "target/" + jarName;
-        ScriptGenerator.doGenerate(shellPath,jarPath);
+        ScriptGenerator.doGenerate(shellPath, jarPath);
         return jarPath;
     }
 
