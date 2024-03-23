@@ -28,41 +28,42 @@ import java.util.stream.Collectors;
 
 public class TemplateMaker {
 
+    /**
+     * 测试
+     */
     public static void main(String[] args) {
 
         // 第读取配置文件
         String springBootMeta = ResourceUtil.readUtf8Str("springbootmeta1.json");
         // 将配置文件转换成对象
         TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        long l = makeTemplate(templateMakerConfig);
+        // 制作模板与生成配置文件，下同
+        makeTemplate(templateMakerConfig);
 
         springBootMeta = ResourceUtil.readUtf8Str("springbootmeta2.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        l = makeTemplate(templateMakerConfig);
+        makeTemplate(templateMakerConfig);
 
         springBootMeta = ResourceUtil.readUtf8Str("springbootmeta3.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        l = makeTemplate(templateMakerConfig);
+        makeTemplate(templateMakerConfig);
 
 
         springBootMeta = ResourceUtil.readUtf8Str("springbootmeta4.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        l = makeTemplate(templateMakerConfig);
+        makeTemplate(templateMakerConfig);
 
         springBootMeta = ResourceUtil.readUtf8Str("springbootmeta5.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        l = makeTemplate(templateMakerConfig);
+        makeTemplate(templateMakerConfig);
 
         springBootMeta = ResourceUtil.readUtf8Str("springbootmeta6.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        l = makeTemplate(templateMakerConfig);
+        makeTemplate(templateMakerConfig);
 
         springBootMeta = ResourceUtil.readUtf8Str("springbootmeta7.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        System.out.println(templateMakerConfig);
-        l = makeTemplate(templateMakerConfig);
-
-        System.out.println(l);
+        makeTemplate(templateMakerConfig);
 
     }
 

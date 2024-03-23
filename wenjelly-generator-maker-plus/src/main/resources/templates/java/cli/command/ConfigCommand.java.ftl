@@ -25,6 +25,5 @@ public class ConfigCommand implements Runnable {
             System.out.println("字段类型：" + field.getType() + "   字段名称： " + field.getName());
             System.out.println("---");
         }
-
     }
 }
