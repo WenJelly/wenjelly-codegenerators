@@ -17,7 +17,7 @@ import picocli.CommandLine.Option;
 
 import java.util.concurrent.Callable;
 
-@Command(name = "generate", description = "生成代码",mixinStandardHelpOptions = true)
+@Command(name = "generate", description = "生成代码", mixinStandardHelpOptions = true)
 @Data
 public class GenerateCommand implements Callable {
 
@@ -47,7 +47,7 @@ public class GenerateCommand implements Callable {
 //        model.setOutputText(outputText);
 //        model.setLoop(loop);
         // -----------------------------------------------创建数据模型还有更简单的，使用类复制
-        BeanUtil.copyProperties(this,model);
+        BeanUtil.copyProperties(this, model);
 
         // 将数据模型传递给模板,创建代码生成器（包括静态与动态）
         DynamicAndStaticGenerator mainGenerator = new DynamicAndStaticGenerator();

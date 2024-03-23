@@ -8,6 +8,7 @@ package com.wenjelly.model;
  */
 
 import lombok.Data;
+
 @Data
 public class MainTemplateConfig {
 

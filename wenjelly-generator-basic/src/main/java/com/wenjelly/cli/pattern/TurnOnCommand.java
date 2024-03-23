@@ -7,7 +7,7 @@ package com.wenjelly.cli.pattern;
  * @author WenJelly
  */
 
-public class TurnOnCommand implements Command{
+public class TurnOnCommand implements Command {
 
     // 电视机
     private Device device;

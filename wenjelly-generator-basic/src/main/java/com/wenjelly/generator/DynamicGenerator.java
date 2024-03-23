@@ -23,17 +23,17 @@ public class DynamicGenerator {
     /**
      * 生成动态文件
      *
-     * @param inputPath 模板文件输入路径
+     * @param inputPath  模板文件输入路径
      * @param outputPath 输出路径
-     * @param model 数据模型
-     * @throws IOException IOE异常
+     * @param model      数据模型
+     * @throws IOException       IOE异常
      * @throws TemplateException 模板异常
      */
     public static void doGenerate(String inputPath, String outputPath, Object model) throws IOException, TemplateException {
         // new 出 Configuration 对象，参数为FreeMarker版本号
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_32);
         // 指定模板文件所在的路径
-        File templateDir  = new File(inputPath).getParentFile();
+        File templateDir = new File(inputPath).getParentFile();
         configuration.setDirectoryForTemplateLoading(templateDir);
         // 设置模板文件使用的字符集
         configuration.setDefaultEncoding("utf-8");
@@ -44,7 +44,7 @@ public class DynamicGenerator {
         // 指定生成的文件,注意：目录一定要存在，否则会报错
         FileWriter fileWriter = new FileWriter(outputPath);
         // 将数据模型传递给模板并生成目标文件
-        template.process(model,fileWriter);
+        template.process(model, fileWriter);
         // 关闭输出流
         fileWriter.close();
     }

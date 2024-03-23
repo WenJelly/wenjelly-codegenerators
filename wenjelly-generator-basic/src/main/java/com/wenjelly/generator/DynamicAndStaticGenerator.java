@@ -25,7 +25,7 @@ public class DynamicAndStaticGenerator {
      */
     private static String staticInputPath;
     /**
-     *静态目标输出位置
+     * 静态目标输出位置
      */
     private static String staticOutputPath;
 
@@ -40,6 +40,7 @@ public class DynamicAndStaticGenerator {
 
     /**
      * 完整生成（静态+动态）
+     *
      * @param args
      */
     public static void main(String[] args) throws TemplateException, IOException {
@@ -54,7 +55,7 @@ public class DynamicAndStaticGenerator {
         staticOutputPath = property + File.separator + "wenjelly-generator-basic"
                 + File.separator + "src/main/resources/templatesout";
         // 生成静态文件
-        StaticGenerator.copyFileByHuTool(staticInputPath,staticOutputPath);
+        StaticGenerator.copyFileByHuTool(staticInputPath, staticOutputPath);
 
 
         // 获取动态输入位置
@@ -65,7 +66,7 @@ public class DynamicAndStaticGenerator {
                 + File.separator + "src/main/resources/templatesout"
                 + File.separator + "acm-template/src/main/java/com/wenjelly/acm/MainTemplate.java";
         // 生成动态文件
-        DynamicGenerator.doGenerate(dynamicInputPath,dynamicOutputPath,model);
+        DynamicGenerator.doGenerate(dynamicInputPath, dynamicOutputPath, model);
 
     }
 
