@@ -6,7 +6,7 @@
     "author": "WenJelly",
     "createTime": "2024-3-21",
     "fileConfig": {
-        "sourceRootPath": "D:/Development/IDEAJavaProjects/wenjelly-generators/wenjelly-generator-maker-plus/.temp/1/springboot-init",
+        "sourceRootPath": "D:/Development/IDEAJavaProjects/wenjelly-generators/wenjelly-generator-maker-plus/.temp/1/spring-boot-template",
         "files": [
             {
                 "type": "group",
