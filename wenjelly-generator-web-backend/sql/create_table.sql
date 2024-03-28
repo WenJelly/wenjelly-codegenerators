@@ -20,7 +20,7 @@ create table if not exists user
     updateTime   datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete     tinyint      default 0                 not null comment '是否删除',
     index idx_userAccount (userAccount)
-    ) comment '用户' collate = utf8mb4_unicode_ci;
+) comment '用户' collate = utf8mb4_unicode_ci;
 
 -- 代码生成器表
 create table if not exists generator
@@ -42,14 +42,4 @@ create table if not exists generator
     updateTime  datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete    tinyint  default 0                 not null comment '是否删除',
     index idx_userId (userId)
-    ) comment '代码生成器' collate = utf8mb4_unicode_ci;
-
-INSERT INTO wenjelly_generator.user (id, userAccount, userPassword, userName, userAvatar, userProfile, userRole) VALUES (1, 'test', 'b0dd3697a192885d7c055db46155b26a', 'test11', 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png', '我有一头小毛驴我从来也不骑', 'admin');
-INSERT INTO wenjelly_generator.user (id, userAccount, userPassword, userName, userAvatar, userProfile, userRole) VALUES (2, 'test2', 'b0dd3697a192885d7c055db46155b26a', 'test22', 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png', '我有一头小毛驴我从来也不骑', 'user');
-
-
-INSERT INTO wenjelly_generator.generator (id, name, description, basePackage, version, author, tags, picture, fileConfig, modelConfig, distPath, status, userId) VALUES (1, 'ACM 模板项目', 'ACM 模板项目生成器', 'com.wenjelly', '1.0', '测试项目', '["Java"]', 'https://pic.wenjelly.icu/1/_r0_c1851-bf115939332e.jpg', '{}', '{}', null, 0, 1);
-INSERT INTO wenjelly_generator.generator (id, name, description, basePackage, version, author, tags, picture, fileConfig, modelConfig, distPath, status, userId) VALUES (2, 'Spring Boot 初始化模板', 'Spring Boot 初始化模板项目生成器', 'com.wenjelly', '1.0', '测试项目', '["Java"]', 'https://pic.wenjelly.icu/1/_r0_c0726-7e30f8db802a.jpg', '{}', '{}', null, 0, 1);
-INSERT INTO wenjelly_generator.generator (id, name, description, basePackage, version, author, tags, picture, fileConfig, modelConfig, distPath, status, userId) VALUES (3, '测试项目外卖', '测试项目外卖项目生成器', 'com.wenjelly', '1.0', '测试项目', '["Java", "前端"]', 'https://pic.wenjelly.icu/1/_r1_c0cf7-f8e4bd865b4b.jpg', '{}', '{}', null, 0, 1);
-INSERT INTO wenjelly_generator.generator (id, name, description, basePackage, version, author, tags, picture, fileConfig, modelConfig, distPath, status, userId) VALUES (4, '测试项目用户中心', '测试项目用户中心项目生成器', 'com.wenjelly', '1.0', '测试项目', '["Java", "前端"]', 'https://pic.wenjelly.icu/1/_r1_c1c15-79cdecf24aed.jpg', '{}', '{}', null, 0, 1);
-INSERT INTO wenjelly_generator.generator (id, name, description, basePackage, version, author, tags, picture, fileConfig, modelConfig, distPath, status, userId) VALUES (5, '测试项目商城', '测试项目商城项目生成器', 'com.wenjelly', '1.0', '测试项目', '["Java", "前端"]', 'https://pic.wenjelly.icu/1/_r1_c0709-8e80689ac1da.jpg', '{}', '{}', null, 0, 1);
+) comment '代码生成器' collate = utf8mb4_unicode_ci;

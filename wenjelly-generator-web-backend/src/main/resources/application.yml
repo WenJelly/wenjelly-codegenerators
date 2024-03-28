@@ -1,4 +1,5 @@
 # 公共配置文件
+
 spring:
   application:
     name: wenjelly-generator-web-backend
@@ -43,7 +44,7 @@ spring:
       max-file-size: 10MB
 server:
   address: 0.0.0.0
-  port: 8080
+  port: 8120
   servlet:
     context-path: /api
     # cookie 30 天过期
@@ -98,4 +99,4 @@ knife4j:
       default:
         api-rule: package
         api-rule-resources:
-          - com.wenjelly.backend.controller
+          - com.wenjelly.generatorbackend.controller
