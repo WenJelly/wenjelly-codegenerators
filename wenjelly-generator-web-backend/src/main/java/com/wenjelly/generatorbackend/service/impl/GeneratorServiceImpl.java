@@ -9,7 +9,7 @@ import com.wenjelly.generatorbackend.constant.CommonConstant;
 import com.wenjelly.generatorbackend.exception.BusinessException;
 import com.wenjelly.generatorbackend.exception.ThrowUtils;
 import com.wenjelly.generatorbackend.mapper.GeneratorMapper;
-import com.wenjelly.generatorbackend.model.dto.post.GeneratorQueryRequest;
+import com.wenjelly.generatorbackend.model.dto.generator.GeneratorQueryRequest;
 import com.wenjelly.generatorbackend.model.entity.Generator;
 import com.wenjelly.generatorbackend.model.entity.User;
 import com.wenjelly.generatorbackend.model.vo.GeneratorVO;
@@ -25,10 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -78,29 +75,40 @@ public class GeneratorServiceImpl extends ServiceImpl<GeneratorMapper, Generator
         if (generatorQueryRequest == null) {
             return queryWrapper;
         }
+        Long id = generatorQueryRequest.getId();
+        Long notId = generatorQueryRequest.getNotId();
         String searchText = generatorQueryRequest.getSearchText();
+        List<String> tags = generatorQueryRequest.getTags();
+        Long userId = generatorQueryRequest.getUserId();
+        String name = generatorQueryRequest.getName();
+        String description = generatorQueryRequest.getDescription();
+        String basePackage = generatorQueryRequest.getBasePackage();
+        String version = generatorQueryRequest.getVersion();
+        String author = generatorQueryRequest.getAuthor();
+        String distPath = generatorQueryRequest.getDistPath();
+        Integer status = generatorQueryRequest.getStatus();
         String sortField = generatorQueryRequest.getSortField();
         String sortOrder = generatorQueryRequest.getSortOrder();
-        Long id = generatorQueryRequest.getId();
-        String title = generatorQueryRequest.getTitle();
-        String content = generatorQueryRequest.getContent();
-        List<String> tagList = generatorQueryRequest.getTags();
-        Long userId = generatorQueryRequest.getUserId();
-        Long notId = generatorQueryRequest.getNotId();
+
         // 拼接查询条件
         if (StringUtils.isNotBlank(searchText)) {
-            queryWrapper.and(qw -> qw.like("title", searchText).or().like("content", searchText));
+            queryWrapper.and(qw -> qw.like("name", searchText).or().like("description", searchText));
         }
-        queryWrapper.like(StringUtils.isNotBlank(title), "title", title);
-        queryWrapper.like(StringUtils.isNotBlank(content), "content", content);
-        if (CollUtil.isNotEmpty(tagList)) {
-            for (String tag : tagList) {
+        queryWrapper.like(StringUtils.isNotBlank(name), "name", name);
+        queryWrapper.like(StringUtils.isNotBlank(description), "description", description);
+        if (CollUtil.isNotEmpty(tags)) {
+            for (String tag : tags) {
                 queryWrapper.like("tags", "\"" + tag + "\"");
             }
         }
         queryWrapper.ne(ObjectUtils.isNotEmpty(notId), "id", notId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
+        queryWrapper.eq(StringUtils.isNotBlank(basePackage), "basePackage", basePackage);
+        queryWrapper.eq(StringUtils.isNotBlank(version), "version", version);
+        queryWrapper.eq(StringUtils.isNotBlank(author), "author", author);
+        queryWrapper.eq(StringUtils.isNotBlank(distPath), "distPath", distPath);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(status), "status", status);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;

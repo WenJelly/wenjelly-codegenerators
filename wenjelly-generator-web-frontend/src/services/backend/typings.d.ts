@@ -108,39 +108,77 @@ declare namespace API {
   };
 
   type GeneratorAddRequest = {
-    content?: string;
+    author?: string;
+    basePackage?: string;
+    createTime?: string;
+    description?: string;
+    distPath?: string;
+    fileConfig?: FileConfigBean;
+    id?: number;
+    modelConfig?: ModelConfigBean;
+    name?: string;
+    picture?: string;
+    status?: number;
     tags?: string[];
-    title?: string;
+    updateTime?: string;
+    userId?: number;
+    version?: string;
   };
 
   type GeneratorEditRequest = {
-    content?: string;
+    author?: string;
+    basePackage?: string;
+    createTime?: string;
+    description?: string;
+    distPath?: string;
+    fileConfig?: string;
     id?: number;
+    modelConfig?: string;
+    name?: string;
+    picture?: string;
+    status?: number;
     tags?: string[];
-    title?: string;
+    updateTime?: string;
+    userId?: number;
+    version?: string;
   };
 
   type GeneratorQueryRequest = {
-    content?: string;
+    author?: string;
+    basePackage?: string;
     current?: number;
-    favourUserId?: number;
+    description?: string;
+    distPath?: string;
     id?: number;
+    name?: string;
     notId?: number;
     orTags?: string[];
     pageSize?: number;
     searchText?: string;
     sortField?: string;
     sortOrder?: string;
+    status?: number;
     tags?: string[];
-    title?: string;
     userId?: number;
+    version?: string;
   };
 
   type GeneratorUpdateRequest = {
-    content?: string;
+    author?: string;
+    basePackage?: string;
+    createTime?: string;
+    description?: string;
+    distPath?: string;
+    fileConfig?: FileConfigBean;
     id?: number;
+    modelConfig?: ModelConfigBean;
+    name?: string;
+    picture?: string;
+    status?: number;
     tags?: string[];
-    title?: string;
+    updateTime?: string;
+    userId?: number;
+    version?: string;
   };
 
   type GeneratorVO = {

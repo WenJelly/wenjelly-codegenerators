@@ -3,14 +3,14 @@ package com.wenjelly.generatorbackend.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.wenjelly.generatorbackend.model.dto.post.GeneratorQueryRequest;
+import com.wenjelly.generatorbackend.model.dto.generator.GeneratorQueryRequest;
 import com.wenjelly.generatorbackend.model.entity.Generator;
 import com.wenjelly.generatorbackend.model.vo.GeneratorVO;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 帖子服务
+ * 生成器服务
  */
 public interface GeneratorService extends IService<Generator> {
 
@@ -32,7 +32,7 @@ public interface GeneratorService extends IService<Generator> {
 
 
     /**
-     * 获取帖子封装
+     * 获取生成器封装
      *
      * @param generator
      * @param request
@@ -41,7 +41,7 @@ public interface GeneratorService extends IService<Generator> {
     GeneratorVO getGeneratorVO(Generator generator, HttpServletRequest request);
 
     /**
-     * 分页获取帖子封装
+     * 分页获取生成器封装
      *
      * @param generatorPage
      * @param request
