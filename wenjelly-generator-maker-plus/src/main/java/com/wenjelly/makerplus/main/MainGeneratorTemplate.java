@@ -11,6 +11,7 @@ package com.wenjelly.makerplus.main;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import cn.hutool.extra.template.TemplateException;
 import com.wenjelly.makerplus.generator.JarGenerator;
 import com.wenjelly.makerplus.generator.ScriptGenerator;
@@ -225,7 +226,7 @@ public abstract class MainGeneratorTemplate {
         return jarPath;
     }
 
-    protected void doDistDir(String outputRootPath, String jarPath) {
+    protected String doDistDir(String outputRootPath, String jarPath) {
         // 这里用于构建精简版dist
         String shellPath = outputRootPath + File.separator + "generator";
         String outputSourcePath = outputRootPath + File.separator + ".source";
@@ -240,6 +241,19 @@ public abstract class MainGeneratorTemplate {
         FileUtil.copy(shellPath + ".bat", distOutputPath, true);
         // 拷贝源码
         FileUtil.copy(outputSourcePath, distOutputPath, true);
+        return distOutputPath;
+    }
+
+    /**
+     * 压缩文件包
+     *
+     * @param outputPath 需要压缩的文件位置
+     * @return 压缩后的位置
+     */
+    protected String doZip(String outputPath) {
+        String zipPath = outputPath + ".zip";
+        ZipUtil.zip(outputPath, zipPath);
+        return zipPath;
     }
 
 

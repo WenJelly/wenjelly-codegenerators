@@ -16,8 +16,8 @@ import java.io.IOException;
 
 public class DistMainGenerator extends MainGeneratorTemplate{
 
-    @Test
-    public void test() throws TemplateException, IOException, InterruptedException {
-        super.doGenerator();
+    @Override
+    protected String doDistDir(String outputRootPath, String jarPath) {
+        return "制作简约生成器";
     }
 }

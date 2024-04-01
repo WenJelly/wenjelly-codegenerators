@@ -6,7 +6,6 @@ import com.wenjelly.generatorbackend.common.BaseResponse;
 import com.wenjelly.generatorbackend.common.DeleteRequest;
 import com.wenjelly.generatorbackend.common.ErrorCode;
 import com.wenjelly.generatorbackend.common.ResultUtils;
-import com.wenjelly.generatorbackend.config.WxOpenConfig;
 import com.wenjelly.generatorbackend.constant.UserConstant;
 import com.wenjelly.generatorbackend.exception.BusinessException;
 import com.wenjelly.generatorbackend.exception.ThrowUtils;
@@ -37,9 +36,6 @@ public class UserController {
 
     @Resource
     private UserService userService;
-
-    @Resource
-    private WxOpenConfig wxOpenConfig;
 
     // region 登录相关
 

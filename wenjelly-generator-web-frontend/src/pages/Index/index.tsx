@@ -1,9 +1,9 @@
+import {listGeneratorVoByPageUsingPost} from '@/services/backend/generatorController';
 import {UserOutlined} from '@ant-design/icons';
 import {PageContainer, ProFormSelect, ProFormText, QueryFilter} from '@ant-design/pro-components';
 import {Avatar, Card, Flex, Image, Input, List, message, Tabs, Tag, Typography} from 'antd';
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
-import {listGeneratorVoByPageUsingPost} from "@/services/backend/generatorController";
 
 /**
  * 默认分页参数

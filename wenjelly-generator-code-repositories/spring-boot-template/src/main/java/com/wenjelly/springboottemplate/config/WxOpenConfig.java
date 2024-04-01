@@ -1,4 +1,12 @@
-package com.wenjelly.generatorbackend.config;
+package com.wenjelly.springboottemplate.config;
+
+/*
+ * @time 2024/3/24 14:15
+ * @package com.wenjelly.springboottemplate.config
+ * @project spring-boot-template
+ * @author WenJelly
+ * 微信开放平台配置
+ */
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -8,9 +16,6 @@ import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * 微信开放平台配置
- */
 @Slf4j
 @Configuration
 @ConfigurationProperties(prefix = "wx.open")

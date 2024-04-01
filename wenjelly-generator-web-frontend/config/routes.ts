@@ -7,7 +7,27 @@ export default [
       { path: '/user/register', component: './User/Register' },
     ],
   },
-  { path: '/', icon: 'home', component: './index', name: '首页' },
+  { path: '/', icon: 'home', component: './Index', name: '首页' },
+  {
+    path: '/test/file',
+    icon: 'home',
+    component: './Test/File',
+    name: '文件上传与下载',
+    hideInMenu: true,
+  },
+  {
+    path: '/generator/add',
+    icon: 'plus',
+    component: './Generator/Add',
+    name: '生成器创建',
+  },
+  {
+    path: '/generator/update',
+    icon: 'plus',
+    component: './Generator/Add',
+    name: '生成器修改',
+    hideInMenu: true,
+  },
   {
     path: '/admin',
     icon: 'crown',
