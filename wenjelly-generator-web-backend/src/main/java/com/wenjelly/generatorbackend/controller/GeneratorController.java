@@ -1,7 +1,11 @@
 package com.wenjelly.generatorbackend.controller;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qcloud.cos.model.COSObject;
+import com.qcloud.cos.model.COSObjectInputStream;
+import com.qcloud.cos.utils.IOUtils;
 import com.wenjelly.generatorbackend.annotation.AuthCheck;
 import com.wenjelly.generatorbackend.common.BaseResponse;
 import com.wenjelly.generatorbackend.common.DeleteRequest;
@@ -10,6 +14,7 @@ import com.wenjelly.generatorbackend.common.ResultUtils;
 import com.wenjelly.generatorbackend.constant.UserConstant;
 import com.wenjelly.generatorbackend.exception.BusinessException;
 import com.wenjelly.generatorbackend.exception.ThrowUtils;
+import com.wenjelly.generatorbackend.manager.CosManager;
 import com.wenjelly.generatorbackend.model.dto.generator.GeneratorAddRequest;
 import com.wenjelly.generatorbackend.model.dto.generator.GeneratorEditRequest;
 import com.wenjelly.generatorbackend.model.dto.generator.GeneratorQueryRequest;
@@ -25,6 +30,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -40,6 +47,9 @@ public class GeneratorController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private CosManager cosManager;
 
     // region 增删改查
 
@@ -232,6 +242,66 @@ public class GeneratorController {
         }
         boolean result = generatorService.updateById(generator);
         return ResultUtils.success(result);
+    }
+
+    /**
+     * 文件下载
+     *
+     * @param id       生成器id
+     * @param request
+     * @param response
+     */
+    @GetMapping("/download")
+    public void downloadGeneratorById(long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        // 校验
+        if (id < 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 得到发起请求的用户id，如果未登录的话，这个方法就会报错
+        User loginUser = userService.getLoginUser(request);
+        // 得到所需的生成器
+        Generator generator = generatorService.getById(id);
+        // 校验
+        if (generator == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        // 获取产物包路径，也就是在云存储上面的文件路径
+        String filePath = generator.getDistPath();
+        if (StrUtil.isBlank(filePath)) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "产物包不存在");
+        }
+
+        // 追踪事件，可以知晓哪个用户下载了什么，防止流量超出
+        log.info("用户 {} 下载了 {}", loginUser, filePath);
+
+        // 接下来就是下载文件了
+        COSObjectInputStream cosObjectInput = null;
+        try {
+            // 参考腾讯云对象存储官方文档
+            // 得到下载的文件
+            COSObject cosObject = cosManager.getObject(filePath);
+            // 转换成流
+            cosObjectInput = cosObject.getObjectContent();
+            // 处理下载到的流
+            byte[] bytes = IOUtils.toByteArray(cosObjectInput);
+            // 设置响应头
+            response.setContentType("application/octet-steam;charset=UTF-8");
+            response.setHeader("Content-Disposition", "attachment;filename = " + filePath);
+            // 写入响应
+            response.getOutputStream().write(bytes);
+            // 刷新缓存
+            response.getOutputStream().flush();
+        } catch (Exception e) {
+            log.error("file download error, filepath = " + filePath, e);
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "下载失败");
+        } finally {
+            if (cosObjectInput != null) {
+                cosObjectInput.close();
+            }
+
+        }
+
     }
 
 }

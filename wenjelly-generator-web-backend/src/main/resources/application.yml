@@ -87,8 +87,8 @@ cos:
   client:
     accessKey: xxx
     secretKey: xxx
-    region: xxx
-    bucket: xxx
+    region: xxx-xxx
+    bucket: xxx-xxx-xxx
 # 接口文档配置
 knife4j:
   enable: true

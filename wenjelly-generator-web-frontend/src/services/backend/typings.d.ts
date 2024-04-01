@@ -69,6 +69,11 @@ declare namespace API {
     id?: number;
   };
 
+  type downloadGeneratorByIdUsingGETParams = {
+    /** id */
+    id?: number;
+  };
+
   type FileConfigBean = {
     files?: FileInfo[];
     inputRootPath?: string;
