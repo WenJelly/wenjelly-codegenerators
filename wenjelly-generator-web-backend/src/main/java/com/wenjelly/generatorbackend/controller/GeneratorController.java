@@ -309,6 +309,7 @@ public class GeneratorController {
 
     }
 
+    @PostMapping("/use")
     /**
      * 使用代码生成器
      *
