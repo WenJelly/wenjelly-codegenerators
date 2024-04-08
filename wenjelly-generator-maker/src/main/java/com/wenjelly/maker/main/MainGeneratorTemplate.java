@@ -162,6 +162,10 @@ public abstract class MainGeneratorTemplate {
         inputFilePath = inputRootPath + File.separator + "java/cli/CommandExecutor.java.ftl";
         outputFilePath = outputBasePackagePath + File.separator + "cli/CommandExecutor.java";
         DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
+        // 生成 JsonGenerateCommand文件
+        inputFilePath = inputRootPath + File.separator + "java/cli/command/JsonGenerateCommand.java.ftl";
+        outputFilePath = outputBasePackagePath + File.separator + "cli/command/JsonGenerateCommand.java";
+        DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
     }
 
 

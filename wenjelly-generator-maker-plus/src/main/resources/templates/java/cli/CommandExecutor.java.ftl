@@ -3,6 +3,7 @@ package ${basePackage}.cli;
 import com.wenjelly.cli.command.ConfigCommand;
 import com.wenjelly.cli.command.ListCommand;
 import com.wenjelly.cli.command.GenerateCommand;
+import com.wenjelly.cli.command.JsonGenerateCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -21,7 +22,8 @@ public class CommandExecutor implements Runnable {
         commandLine = new CommandLine(this)
                 .addSubcommand(new ConfigCommand())
                 .addSubcommand(new GenerateCommand())
-                .addSubcommand(new ListCommand());
+                .addSubcommand(new ListCommand())
+                .addSubcommand(new JsonGenerateCommand());
     }
 
     @Override

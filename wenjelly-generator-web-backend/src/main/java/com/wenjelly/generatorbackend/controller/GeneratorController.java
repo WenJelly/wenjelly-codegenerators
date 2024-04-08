@@ -1,6 +1,8 @@
 package com.wenjelly.generatorbackend.controller;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qcloud.cos.model.COSObject;
@@ -15,10 +17,7 @@ import com.wenjelly.generatorbackend.constant.UserConstant;
 import com.wenjelly.generatorbackend.exception.BusinessException;
 import com.wenjelly.generatorbackend.exception.ThrowUtils;
 import com.wenjelly.generatorbackend.manager.CosManager;
-import com.wenjelly.generatorbackend.model.dto.generator.GeneratorAddRequest;
-import com.wenjelly.generatorbackend.model.dto.generator.GeneratorEditRequest;
-import com.wenjelly.generatorbackend.model.dto.generator.GeneratorQueryRequest;
-import com.wenjelly.generatorbackend.model.dto.generator.GeneratorUpdateRequest;
+import com.wenjelly.generatorbackend.model.dto.generator.*;
 import com.wenjelly.generatorbackend.model.entity.Generator;
 import com.wenjelly.generatorbackend.model.entity.User;
 import com.wenjelly.generatorbackend.model.vo.GeneratorVO;
@@ -31,8 +30,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 帖子接口
@@ -301,6 +306,132 @@ public class GeneratorController {
             }
 
         }
+
+    }
+
+    /**
+     * 使用代码生成器
+     *
+     * @param generatorUseRequest
+     * @param request
+     * @param response
+     */
+    public void useGenerator(@RequestBody GeneratorUseRequest generatorUseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        Long id = generatorUseRequest.getId();
+        Map<String, Object> dataModel = generatorUseRequest.getDataModel();
+
+        // 判断是否登录
+        User loginUser = userService.getLoginUser(request);
+        // 得到需要使用的生成器
+        Generator generator = generatorService.getById(id);
+        if (generator == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+
+        // 得到生成器存储路径
+        String distPath = generator.getDistPath();
+        if (StrUtil.isBlank(distPath)) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "产物包不存在");
+        }
+
+        // 工作空间
+        String projectPath = System.getProperty("user.dir");
+        String tempDirPath = String.format("%s/.temp/use/%s", projectPath, id);
+        // 下载完之后的文件存储路径
+        String zipFilePath = tempDirPath + File.separator + "dist.zip";
+        // 新建文件
+        if (!FileUtil.exist(zipFilePath)) {
+            // 创建
+            FileUtil.touch(zipFilePath);
+        }
+
+        // 开始下载文件
+        try {
+            cosManager.download(distPath, zipFilePath);
+        } catch (InterruptedException e) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "生成器下载失败");
+        }
+
+        // 解压从腾讯云下载过来的文件
+        File unzipDistDir = ZipUtil.unzip(zipFilePath);
+
+        // 将用户传递过来的数据模型写入到JSON文件中
+        // 先设置json文件的存储路径在同目录下
+        String dataModelFilePath = tempDirPath + File.separator + "meta.json";
+        // 将数据模型转换成JSON字符串
+        String jsonStr = JSONUtil.toJsonStr(dataModel);
+        // 写入到文件中
+        FileUtil.writeUtf8String(jsonStr, dataModelFilePath);
+
+        // 开始执行脚本程序
+        // 1.找到脚本程序所在位置，只递归俩层，正常来说脚本文件不会在太深的位置
+        File scriptFile = FileUtil.loopFiles(unzipDistDir, 2, null).stream()
+                .filter(file -> file.isFile() && "generator".equals(file.getName()))
+                .findFirst()
+                .orElseThrow(RuntimeException::new);
+
+        // 2.添加可执行权限
+        Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rwxrwxrwx");
+        try {
+            Files.setPosixFilePermissions(scriptFile.toPath(), permissions);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // 3.创建脚本程序指令，并执行程序
+        // 得到脚本文件的父目录位置
+        File scriptDir = scriptFile.getParentFile();
+        // 转换一下
+        String scriptAbsolutePath = scriptDir.getAbsolutePath().replace("\\", "/");
+        // 构造命令，这里如果是MAC或者LINUX要使用'./generator'
+        String[] command = new String[]{scriptAbsolutePath, "json-generator", "--file=" + dataModelFilePath};
+
+        // 创建脚本执行类
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        // 脚本在scriptDir目录下执行
+        processBuilder.directory(scriptDir);
+
+        // 执行脚本
+        try {
+            Process process = processBuilder.start();
+
+            // 读取命令的输出
+            InputStream inputStream = process.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            if ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            // 等待命令执行完成，exitCode为退出代码
+            int exitCode = process.waitFor();
+            System.out.println("命令执行结束，退出代码为： " + exitCode);
+        } catch (Exception e) {
+            // 打印错误信息
+            e.printStackTrace();
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "执行生成器脚本错误");
+        }
+
+        // 找到脚本执行结束后，生成的文件夹，也就是generator文件夹，一般在脚本文件的父目录下
+        String generatorPath = scriptDir.getAbsolutePath() + File.separator + "generator";
+        // 压缩成压缩包后存放的路径
+        String resultPath = tempDirPath + "/result.zip";
+        // 压缩成压缩包
+        File resultFile = ZipUtil.zip(generatorPath, resultPath);
+
+        // 准备返回给前端
+        // 设置响应头
+        response.setContentType("application/octet-stream;charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment;fileName=" + resultFile.getName());
+
+        // 写入响应
+        Files.copy(resultFile.toPath(), response.getOutputStream());
+
+        // 异步清理文件
+        CompletableFuture.runAsync(() -> {
+            FileUtil.del(tempDirPath);
+        });
 
     }
 

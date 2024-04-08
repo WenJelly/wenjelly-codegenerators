@@ -8,7 +8,7 @@
   "fileConfig": {
     "inputRootPath": ".source/acm-template",
     "outputRootPath": "generated",
-    "sourceRootPath": "D:/Development/IDEAJavaProjects/wenjelly-generators/wenjelly-generator-demo-projects/acm-template",
+    "sourceRootPath": "D:/Development/IDEAJavaProjects/wenjelly-generators/wenjelly-generator-code-repositories/acm-template",
     "type": "dir",
     "files": [
       {

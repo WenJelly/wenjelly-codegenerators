@@ -114,8 +114,10 @@ public abstract class MainGeneratorTemplate {
     protected void copyCodeTemplate(Meta meta, String outputRootPath) {
         // 得到源代码的原始路径
         String sourceRootPath = meta.getFileConfig().getSourceRootPath();
+        System.out.println(sourceRootPath);
         // .source用于存放源代码
         String outputSourcePath = outputRootPath + File.separator + ".source";
+        System.out.println(outputSourcePath);
         // 将源代码复制到该目录下
         FileUtil.copy(sourceRootPath, outputSourcePath, true);
     }

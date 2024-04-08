@@ -7,6 +7,7 @@ package com.wenjelly.makerplus;
  * @author WenJelly
  */
 
+import com.wenjelly.makerplus.main.DistMainGenerator;
 import com.wenjelly.makerplus.main.MainGeneratorTemplate;
 import com.wenjelly.makerplus.main.ZipGenerator;
 import freemarker.template.TemplateException;
@@ -18,6 +19,7 @@ public class Main {
     public static void main(String[] args) throws TemplateException, IOException, InterruptedException {
         // 制作zip生成器，需要什么生成器就new对应的生成器类
         MainGeneratorTemplate generator = new ZipGenerator();
+//        MainGeneratorTemplate generator = new DistMainGenerator();
         // 执行
         generator.doGenerator();
     }

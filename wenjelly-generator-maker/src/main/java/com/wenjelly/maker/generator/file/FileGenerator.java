@@ -27,7 +27,7 @@ public class FileGenerator {
 
     }
 
-    public void doGenerate(DataModel model) throws TemplateException, IOException {
+    public static void doGenerate(DataModel model) throws TemplateException, IOException {
 
         // 输入位置的根目录
         String inputRootPath = ".source/acm-template";
