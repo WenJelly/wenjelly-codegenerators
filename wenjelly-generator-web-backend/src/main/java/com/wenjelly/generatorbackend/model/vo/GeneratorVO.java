@@ -8,8 +8,8 @@ package com.wenjelly.generatorbackend.model.vo;
  */
 
 import cn.hutool.json.JSONUtil;
-import com.wenjelly.generatorbackend.meta.Meta;
 import com.wenjelly.generatorbackend.model.entity.Generator;
+import com.wenjelly.makerplus.meta.Meta;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 

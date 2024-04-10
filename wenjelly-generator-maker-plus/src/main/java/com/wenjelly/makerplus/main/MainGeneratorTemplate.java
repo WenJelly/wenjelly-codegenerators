@@ -9,7 +9,6 @@ package com.wenjelly.makerplus.main;
 
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 import cn.hutool.extra.template.TemplateException;
@@ -38,6 +37,18 @@ public abstract class MainGeneratorTemplate {
         // 模板输出位置根路径
         String outputRootPath = System.getProperty("user.dir") + File.separator + "generator"
                 + File.separator + meta.getName();
+        doGenerator(meta, outputRootPath);
+
+    }
+
+    /**
+     * 重载方法，参数不同
+     *
+     * @param meta
+     * @param outputRootPath
+     */
+    public void doGenerator(Meta meta, String outputRootPath) throws freemarker.template.TemplateException, IOException, InterruptedException {
+
         if (!FileUtil.exist(outputRootPath))
             FileUtil.mkdir(outputRootPath);
         // 因为meta.getBasePackage得到的是com.xxx，这里将它变成com/xxx
@@ -46,9 +57,11 @@ public abstract class MainGeneratorTemplate {
                 + File.separator + basePackage;
 
         // 得到模板资源路径
-        ClassPathResource classPathResource = new ClassPathResource("");
-        String resourceAbsolutePath = classPathResource.getAbsolutePath();
-        String inputRootPath = resourceAbsolutePath + File.separator + "templates";
+//        ClassPathResource classPathResource = new ClassPathResource("");
+//        String resourceAbsolutePath = classPathResource.getAbsolutePath();
+//        String inputRootPath = resourceAbsolutePath + File.separator + "templates";
+        // 优化后就不需要找模板文件路径了
+        String inputRootPath = "";
 
         // 1、将源代码复制到指定目录，方便后续通过相对路径读取
         copyCodeTemplate(meta, outputRootPath);
@@ -66,7 +79,6 @@ public abstract class MainGeneratorTemplate {
         String jarPath = doJarAndShell(outputRootPath, meta);
         // 8、构建精简版
         doDistDir(outputRootPath, jarPath);
-
     }
 
     /**
@@ -228,6 +240,14 @@ public abstract class MainGeneratorTemplate {
         return jarPath;
     }
 
+
+    /**
+     * 构建精简版
+     *
+     * @param outputRootPath 精简文件夹的输出路径
+     * @param jarPath        jar包的路径
+     * @return 返回精简文件夹的路径
+     */
     protected String doDistDir(String outputRootPath, String jarPath) {
         // 这里用于构建精简版dist
         String shellPath = outputRootPath + File.separator + "generator";

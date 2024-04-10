@@ -1,31 +1,30 @@
 package com.wenjelly.generatorbackend.model.dto.generator;
 
 /*
- * @time 2024/4/3 9:49
+ * @time 2024/4/10 9:01
  * @package com.wenjelly.generatorbackend.model.dto.generator
  * @project wenjelly-generator-web-backend
  * @author WenJelly
  */
 
+import com.wenjelly.makerplus.meta.Meta;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
- * 使用代码生成器请求
+ * 制作代码生成器请求
  */
 @Data
-public class GeneratorUseRequest implements Serializable {
+public class GeneratorMakeRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
-     * 生成器的模型参数
+     * 压缩文件路径
      */
-    Map<String, Object> dataModel;
+    private String zipFilePath;
     /**
-     * 生成器id
+     * 元信息
      */
-    private Long id;
-
+    private Meta meta;
 }

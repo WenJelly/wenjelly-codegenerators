@@ -7,7 +7,6 @@ package com.wenjelly.makerplus.template.model;
  * @author WenJelly
  */
 
-import com.wenjelly.makerplus.meta.Meta;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

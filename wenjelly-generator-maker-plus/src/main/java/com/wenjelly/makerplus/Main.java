@@ -7,7 +7,6 @@ package com.wenjelly.makerplus;
  * @author WenJelly
  */
 
-import com.wenjelly.makerplus.main.DistMainGenerator;
 import com.wenjelly.makerplus.main.MainGeneratorTemplate;
 import com.wenjelly.makerplus.main.ZipGenerator;
 import freemarker.template.TemplateException;

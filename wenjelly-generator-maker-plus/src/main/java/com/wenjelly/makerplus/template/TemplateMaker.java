@@ -15,7 +15,6 @@ import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-
 import cn.hutool.json.JSONUtil;
 import com.wenjelly.makerplus.meta.Meta;
 import com.wenjelly.makerplus.meta.enums.FileGenerateTypeEnum;
@@ -23,7 +22,10 @@ import com.wenjelly.makerplus.meta.enums.FileTypeEnum;
 import com.wenjelly.makerplus.template.model.*;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TemplateMaker {

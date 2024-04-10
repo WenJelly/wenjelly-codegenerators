@@ -8,7 +8,6 @@ package com.wenjelly.makerplus.template;
  */
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.StrUtil;
 import com.wenjelly.makerplus.template.enums.FileFilterRangeEnum;
 import com.wenjelly.makerplus.template.enums.FileFilterRuleEnum;
 import com.wenjelly.makerplus.template.model.FileFilterConfig;

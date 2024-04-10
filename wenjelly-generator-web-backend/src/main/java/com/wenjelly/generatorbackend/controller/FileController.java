@@ -8,7 +8,6 @@ import com.wenjelly.generatorbackend.annotation.AuthCheck;
 import com.wenjelly.generatorbackend.common.BaseResponse;
 import com.wenjelly.generatorbackend.common.ErrorCode;
 import com.wenjelly.generatorbackend.common.ResultUtils;
-import com.wenjelly.generatorbackend.constant.FileConstant;
 import com.wenjelly.generatorbackend.constant.UserConstant;
 import com.wenjelly.generatorbackend.exception.BusinessException;
 import com.wenjelly.generatorbackend.manager.CosManager;

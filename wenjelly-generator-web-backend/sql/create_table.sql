@@ -44,7 +44,11 @@ create table if not exists generator
     index idx_userId (userId)
 ) comment '代码生成器' collate = utf8mb4_unicode_ci;
 
-INSERT INTO wenjelly_generator.generator (id, name, description, basePackage, version, author, tags, picture, fileConfig, modelConfig, distPath, status, userId, createTime, updateTime, isDelete) VALUES (100, 'acm-template-pro-generator', 'ACM 示例模板生成器', 'com.wenjelly', '1.0', 'wenjelly', '["Java"]', 'https://code-generator-1325426290.cos.ap-guangzhou.myqcloud.com/demeter-wu-xmas2020-countdown-3.jpg', '{
+INSERT INTO wenjelly_generator.generator (id, name, description, basePackage, version, author, tags, picture,
+                                          fileConfig, modelConfig, distPath, status, userId, createTime, updateTime,
+                                          isDelete)
+VALUES (100, 'acm-template-pro-generator', 'ACM 示例模板生成器', 'com.wenjelly', '1.0', 'wenjelly', '["Java"]',
+        'https://code-generator-1325426290.cos.ap-guangzhou.myqcloud.com/demeter-wu-xmas2020-countdown-3.jpg', '{
     "files": [
       {
         "groupKey": "git",
@@ -73,4 +77,6 @@ INSERT INTO wenjelly_generator.generator (id, name, description, basePackage, ve
         "generateType": "dynamic"
       }
     ]
-  }', '{"models":[{"fieldName":"needGit","type":"boolean","description":"是否生成 .gitignore 文件","defaultValue":true},{"fieldName":"loop","type":"boolean","description":"是否生成循环","defaultValue":false,"abbr":"l"},{"type":"MainTemplate","description":"用于生成核心模板文件","groupKey":"mainTemplate","groupName":"核心模板","models":[{"fieldName":"author","type":"String","description":"作者注释","defaultValue":"wenjelly","abbr":"a"},{"fieldName":"outputText","type":"String","description":"输出信息","defaultValue":"sum = ","abbr":"o"}],"condition":"loop"}]}', '/generator_dist/1738875515482562562/kLbG2yGh-acm-template-pro-generator.zip', 0, 1738875515482562562, '2024-01-06 23:00:17', '2024-01-08 18:50:12', 0);
+  }',
+        '{"models":[{"fieldName":"needGit","type":"boolean","description":"是否生成 .gitignore 文件","defaultValue":true},{"fieldName":"loop","type":"boolean","description":"是否生成循环","defaultValue":false,"abbr":"l"},{"type":"MainTemplate","description":"用于生成核心模板文件","groupKey":"mainTemplate","groupName":"核心模板","models":[{"fieldName":"author","type":"String","description":"作者注释","defaultValue":"wenjelly","abbr":"a"},{"fieldName":"outputText","type":"String","description":"输出信息","defaultValue":"sum = ","abbr":"o"}],"condition":"loop"}]}',
+        '/acm-template-generator-dist.zip', 0, 1738875515482562562, '2024-01-06 23:00:17', '2024-01-08 18:50:12', 0);
