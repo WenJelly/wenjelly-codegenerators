@@ -293,10 +293,23 @@ public class GeneratorController {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "产物包不存在");
         }
 
+        // 设置响应头
+        response.setContentType("application/octet-steam;charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment;filename = " + filePath);
+
+        // 这里使用缓存优化
+        // 先查看文件在不在缓存中
+        String cacheKey = getCacheKey(id, filePath);
+        if (FileUtil.exist(cacheKey)) {
+            // 直接将缓存中的文件返回给前端
+            Files.copy(Paths.get(cacheKey),response.getOutputStream());
+            return ;
+        }
+
         // 追踪事件，可以知晓哪个用户下载了什么，防止流量超出
         log.info("用户 {} 下载了 {}", loginUser, filePath);
 
-        // 接下来就是下载文件了
+        // 如果文件不在服务器缓存中，就从对象存储中下载文件
         COSObjectInputStream cosObjectInput = null;
         try {
             // 参考腾讯云对象存储官方文档
@@ -304,11 +317,28 @@ public class GeneratorController {
             COSObject cosObject = cosManager.getObject(filePath);
             // 转换成流
             cosObjectInput = cosObject.getObjectContent();
+
+            /**
+             * 这里使用流式传输来测试性能，结果发现下载速度更慢了，在数据的实时处理比较好
+             */
+//            // 设置响应头
+//            response.setContentType("application/octet-steam;charset=UTF-8");
+//            response.setHeader("Content-Disposition", "attachment;filename = " + filePath);
+//            try(OutputStream out = response.getOutputStream()) {
+//                // try里面获得输出流，用于输出到web
+//                byte[] buffer = new byte[4096];
+//                int bytesRead;
+//
+//                // 一边读，一边输出到前端
+//                while((bytesRead = cosObjectInput.read(buffer)) != -1) {
+//                    out.write(buffer,0,bytesRead);
+//                }
+//            }catch (Exception e) {
+//                e.printStackTrace();
+//            }
+
             // 处理下载到的流
             byte[] bytes = IOUtils.toByteArray(cosObjectInput);
-            // 设置响应头
-            response.setContentType("application/octet-steam;charset=UTF-8");
-            response.setHeader("Content-Disposition", "attachment;filename = " + filePath);
             // 写入响应
             response.getOutputStream().write(bytes);
             // 刷新缓存
@@ -333,7 +363,10 @@ public class GeneratorController {
      * @param request
      * @param response
      */
-    public void useGenerator(@RequestBody GeneratorUseRequest generatorUseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void useGenerator(
+            @RequestBody GeneratorUseRequest generatorUseRequest,
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
 
         Long id = generatorUseRequest.getId();
         Map<String, Object> dataModel = generatorUseRequest.getDataModel();
@@ -526,6 +559,66 @@ public class GeneratorController {
         CompletableFuture.runAsync(() -> {
             FileUtil.del(tempDirPath);
         });
+    }
+
+
+    /**
+     * 将所需的缓存文件下载到服务器本地
+     *
+     * @param generatorCacheRequest
+     * @param request
+     * @param response
+     */
+    @PostMapping("/cache")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public void downCacheGeneratorById(
+            @RequestBody GeneratorCacheRequest generatorCacheRequest,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+
+        if (generatorCacheRequest == null || generatorCacheRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+
+        // 获取需要缓存的生成器id
+        Long id = generatorCacheRequest.getId();
+        Generator generator = generatorService.getById(id);
+        if (generator == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        // 获取存储地址
+        String distPath = generator.getDistPath();
+        if (StrUtil.isBlank(distPath)) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR,"产物包不存在");
+        }
+
+        // 将产物包下载到这个缓存文件夹中
+        String zipFilePath = getCacheKey(id,distPath);
+
+        if (!FileUtil.exist(zipFilePath)) {
+            FileUtil.touch(zipFilePath);
+        }
+
+        // 下载
+        try {
+            cosManager.download(distPath,zipFilePath);
+        } catch (InterruptedException e) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "压缩包下载失败");
+        }
+    }
+
+    /**
+     * 获得缓存文件的存放位置
+     * @param id
+     * @param distPath
+     * @return
+     */
+    public String getCacheKey(Long id, String distPath) {
+        String property = System.getProperty("user.dir");
+        String tempPath = String.format("%s/.temp/cache/%s",property,id);
+        String zipPath = String.format("%s/%s",tempPath,distPath);
+        return zipPath;
     }
 
 }

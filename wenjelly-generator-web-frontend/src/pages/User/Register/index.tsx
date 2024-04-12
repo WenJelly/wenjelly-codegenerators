@@ -6,8 +6,8 @@ import {useEmotionCss} from '@ant-design/use-emotion-css';
 import {Helmet, history, useModel} from '@umijs/max';
 import {message, Tabs} from 'antd';
 import React, {useState} from 'react';
+import {Link} from 'umi';
 import Settings from '../../../../config/defaultSettings';
-import {Link} from "umi";
 
 /**
  * 新用户注册页面

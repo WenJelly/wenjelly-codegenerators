@@ -3,9 +3,9 @@
  * 解决首次加载时白屏的问题
  */
 (function () {
-  const _root = document.querySelector('#root');
-  if (_root && _root.innerHTML === '') {
-    _root.innerHTML = `
+    const _root = document.querySelector('#root');
+    if (_root && _root.innerHTML === '') {
+        _root.innerHTML = `
       <style>
         html,
         body,
@@ -198,5 +198,5 @@
         </div>
       </div>
     `;
-  }
+    }
 })();
