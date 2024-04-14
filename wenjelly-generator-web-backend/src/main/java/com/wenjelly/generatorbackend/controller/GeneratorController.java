@@ -21,6 +21,7 @@ import com.wenjelly.generatorbackend.common.ResultUtils;
 import com.wenjelly.generatorbackend.constant.UserConstant;
 import com.wenjelly.generatorbackend.exception.BusinessException;
 import com.wenjelly.generatorbackend.exception.ThrowUtils;
+import com.wenjelly.generatorbackend.manager.CacheManager;
 import com.wenjelly.generatorbackend.manager.CosManager;
 import com.wenjelly.generatorbackend.model.dto.generator.*;
 import com.wenjelly.generatorbackend.model.entity.Generator;
@@ -35,7 +36,6 @@ import com.wenjelly.makerplus.meta.MetaValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -50,7 +50,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 生成器接口
@@ -71,6 +70,9 @@ public class GeneratorController {
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+
+    @Resource
+    CacheManager cacheManager;
 
     // region 增删改查
 
@@ -228,30 +230,46 @@ public class GeneratorController {
                                                                      HttpServletRequest request) {
         long current = generatorQueryRequest.getCurrent();
         long size = generatorQueryRequest.getPageSize();
-        // 限制爬虫
-        ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
 
-        // 优先从Redis缓存里面读取
-        // 获取Redis缓存Key
+        // 使用多级缓存  本地 --> Redis --> Mysql
+        // 得到缓存key
         String cacheKey = getPageCacheKey(generatorQueryRequest);
-        // 得到Redis容器（应该）
-        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
-        // 从Redis key里面获取缓存内容
-        String cacheValue = valueOperations.get(cacheKey);
-        if (StrUtil.isNotBlank(cacheValue)) {
-            // 说明缓存里面由内容
+        // 先从缓存中读取
+        String cacheValue = cacheManager.get(cacheKey);
+        if (cacheValue != null) {
             Page<GeneratorVO> generatorVOPage = JSONUtil.toBean(cacheValue,
                     new TypeReference<Page<GeneratorVO>>() {
-
                     },
                     false);
             return ResultUtils.success(generatorVOPage);
         }
 
 
+        // 性能优化 之 使用Redis缓存
+//        // 优先从Redis缓存里面读取
+//        // 获取Redis缓存Key
+//        String cacheKey = getPageCacheKey(generatorQueryRequest);
+//        // 得到Redis容器（应该）
+//        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+//        // 从Redis key里面获取缓存内容
+//        String cacheValue = valueOperations.get(cacheKey);
+//        if (StrUtil.isNotBlank(cacheValue)) {
+//            // 说明缓存里面由内容
+//            Page<GeneratorVO> generatorVOPage = JSONUtil.toBean(cacheValue,
+//                    new TypeReference<Page<GeneratorVO>>() {
+//
+//                    },
+//                    false);
+//            return ResultUtils.success(generatorVOPage);
+//        }
+
+        // 限制爬虫
+        ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
+//         原始代码，未优化
 //        Page<Generator> generatorPage = generatorService.page(new Page<>(current, size),
 //                generatorService.getQueryWrapper(generatorQueryRequest));
 //        Page<GeneratorVO> generatorVOPage = generatorService.getGeneratorVOPage(generatorPage, request);
+
 
         QueryWrapper<Generator> queryWrapper = generatorService.getQueryWrapper(generatorQueryRequest);
         // 优化查询信息，将不需要的给过滤掉
@@ -259,7 +277,7 @@ public class GeneratorController {
         Page<Generator> generatorPage = generatorService.page(new Page<>(current, size), queryWrapper);
         Page<GeneratorVO> generatorVOPage = generatorService.getGeneratorVOPage(generatorPage, request);
 
-        // 将其设置为空值，减少返回给前端的文件大小以及提高性能，因为首页不需要展示这些信息
+        // 性能优化 之 将其设置为空值，减少返回给前端的文件大小以及提高性能，因为首页不需要展示这些信息
 //        generatorPage.getRecords().forEach(generatorVO -> {
 //            generatorVO.setFileConfig(null);
 //            generatorVO.setModelConfig(null);
@@ -267,7 +285,11 @@ public class GeneratorController {
 
 
         // 如果缓存没有，则写入缓存
-        valueOperations.set(cacheKey, JSONUtil.toJsonStr(generatorVOPage), 100, TimeUnit.MINUTES);
+//        valueOperations.set(cacheKey, JSONUtil.toJsonStr(generatorVOPage), 100, TimeUnit.MINUTES);
+//        return ResultUtils.success(generatorVOPage);
+
+        // 如果缓存没有，则写入多级缓存
+        cacheManager.put(cacheKey, JSONUtil.toJsonStr(generatorVOPage));
         return ResultUtils.success(generatorVOPage);
     }
 
