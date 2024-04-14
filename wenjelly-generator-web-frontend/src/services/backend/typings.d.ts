@@ -130,6 +130,11 @@ declare namespace API {
     version?: string;
   };
 
+  type GeneratorCacheRequest = {
+    distPath?: string;
+    id?: number;
+  };
+
   type GeneratorEditRequest = {
     author?: string;
     basePackage?: string;

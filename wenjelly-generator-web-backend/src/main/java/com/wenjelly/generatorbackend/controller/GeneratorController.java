@@ -6,6 +6,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qcloud.cos.model.COSObject;
 import com.qcloud.cos.model.COSObjectInputStream;
@@ -47,7 +48,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 帖子接口
+ * 生成器接口
  */
 @RestController
 @RequestMapping("/generator")
@@ -208,6 +209,38 @@ public class GeneratorController {
     }
 
     /**
+     * 快速分页获取列表（封装类）
+     *
+     * @param generatorQueryRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/list/page/vo/fast")
+    public BaseResponse<Page<GeneratorVO>> listGeneratorVOByPageFast(@RequestBody GeneratorQueryRequest generatorQueryRequest,
+                                                                     HttpServletRequest request) {
+        long current = generatorQueryRequest.getCurrent();
+        long size = generatorQueryRequest.getPageSize();
+        // 限制爬虫
+        ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
+//        Page<Generator> generatorPage = generatorService.page(new Page<>(current, size),
+//                generatorService.getQueryWrapper(generatorQueryRequest));
+//        Page<GeneratorVO> generatorVOPage = generatorService.getGeneratorVOPage(generatorPage, request);
+
+        QueryWrapper<Generator> queryWrapper = generatorService.getQueryWrapper(generatorQueryRequest);
+        // 优化查询信息，将不需要的给过滤掉
+        queryWrapper.select("id", "name", "description", "tags", "picture", "status", "userId", "createTime", "updateTime");
+        Page<Generator> generatorPage = generatorService.page(new Page<>(current, size), queryWrapper);
+        Page<GeneratorVO> generatorVOPage = generatorService.getGeneratorVOPage(generatorPage, request);
+
+        // 将其设置为空值，减少返回给前端的文件大小以及提高性能，因为首页不需要展示这些信息
+//        generatorPage.getRecords().forEach(generatorVO -> {
+//            generatorVO.setFileConfig(null);
+//            generatorVO.setModelConfig(null);
+//        });
+        return ResultUtils.success(generatorVOPage);
+    }
+
+    /**
      * 分页获取当前用户创建的资源列表
      *
      * @param generatorQueryRequest
@@ -288,33 +321,32 @@ public class GeneratorController {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         // 获取产物包路径，也就是在云存储上面的文件路径
-        String filePath = generator.getDistPath();
-        if (StrUtil.isBlank(filePath)) {
+        String distPath = generator.getDistPath();
+        if (StrUtil.isBlank(distPath)) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "产物包不存在");
         }
 
         // 设置响应头
         response.setContentType("application/octet-steam;charset=UTF-8");
-        response.setHeader("Content-Disposition", "attachment;filename = " + filePath);
+        response.setHeader("Content-Disposition", "attachment;filename = " + distPath);
 
         // 这里使用缓存优化
         // 先查看文件在不在缓存中
-        String cacheKey = getCacheKey(id, filePath);
+        String cacheKey = getCacheKey(id, distPath);
         if (FileUtil.exist(cacheKey)) {
             // 直接将缓存中的文件返回给前端
-            Files.copy(Paths.get(cacheKey),response.getOutputStream());
-            return ;
+            Files.copy(Paths.get(cacheKey), response.getOutputStream());
+            return;
         }
-
         // 追踪事件，可以知晓哪个用户下载了什么，防止流量超出
-        log.info("用户 {} 下载了 {}", loginUser, filePath);
+        log.info("用户 {} 下载了 {}", loginUser, distPath);
 
         // 如果文件不在服务器缓存中，就从对象存储中下载文件
         COSObjectInputStream cosObjectInput = null;
         try {
             // 参考腾讯云对象存储官方文档
             // 得到下载的文件
-            COSObject cosObject = cosManager.getObject(filePath);
+            COSObject cosObject = cosManager.getObject(distPath);
             // 转换成流
             cosObjectInput = cosObject.getObjectContent();
 
@@ -344,7 +376,7 @@ public class GeneratorController {
             // 刷新缓存
             response.getOutputStream().flush();
         } catch (Exception e) {
-            log.error("file download error, filepath = " + filePath, e);
+            log.error("file download error, filepath = " + distPath, e);
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "下载失败");
         } finally {
             if (cosObjectInput != null) {
@@ -590,11 +622,11 @@ public class GeneratorController {
         // 获取存储地址
         String distPath = generator.getDistPath();
         if (StrUtil.isBlank(distPath)) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR,"产物包不存在");
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "产物包不存在");
         }
 
         // 将产物包下载到这个缓存文件夹中
-        String zipFilePath = getCacheKey(id,distPath);
+        String zipFilePath = getCacheKey(id, distPath);
 
         if (!FileUtil.exist(zipFilePath)) {
             FileUtil.touch(zipFilePath);
@@ -602,7 +634,7 @@ public class GeneratorController {
 
         // 下载
         try {
-            cosManager.download(distPath,zipFilePath);
+            cosManager.download(distPath, zipFilePath);
         } catch (InterruptedException e) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "压缩包下载失败");
         }
@@ -610,14 +642,15 @@ public class GeneratorController {
 
     /**
      * 获得缓存文件的存放位置
+     *
      * @param id
      * @param distPath
      * @return
      */
     public String getCacheKey(Long id, String distPath) {
         String property = System.getProperty("user.dir");
-        String tempPath = String.format("%s/.temp/cache/%s",property,id);
-        String zipPath = String.format("%s/%s",tempPath,distPath);
+        String tempPath = String.format("%s/.temp/cache/%s", property, id);
+        String zipPath = String.format("%s/%s", tempPath, distPath);
         return zipPath;
     }
 
