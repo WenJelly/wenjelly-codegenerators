@@ -9,10 +9,11 @@ package com.wenjelly.makerplus.meta;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class Meta {
+public class Meta implements Serializable {
     private String name;
     private String description;
     private String basePackage;
@@ -23,7 +24,7 @@ public class Meta {
     private ModelConfigBean modelConfig;
 
     @Data
-    public static class FileConfigBean {
+    public static class FileConfigBean implements Serializable{
         private String inputRootPath;
         private String outputRootPath;
         private String sourceRootPath;
@@ -31,7 +32,7 @@ public class Meta {
         private List<FileInfo> files;
 
         @Data
-        public static class FileInfo {
+        public static class FileInfo implements Serializable{
             private String inputPath;
             private String outputPath;
             private String type;
@@ -44,11 +45,11 @@ public class Meta {
     }
 
     @Data
-    public static class ModelConfigBean {
+    public static class ModelConfigBean implements Serializable{
         private List<ModelInfo> models;
 
         @Data
-        public static class ModelInfo {
+        public static class ModelInfo implements Serializable{
             private String fieldName;
             private String type;
             private String description;

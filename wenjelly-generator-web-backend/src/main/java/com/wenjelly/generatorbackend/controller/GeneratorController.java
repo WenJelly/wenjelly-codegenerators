@@ -235,13 +235,18 @@ public class GeneratorController {
         // 得到缓存key
         String cacheKey = getPageCacheKey(generatorQueryRequest);
         // 先从缓存中读取
-        String cacheValue = cacheManager.get(cacheKey);
-        if (cacheValue != null) {
-            Page<GeneratorVO> generatorVOPage = JSONUtil.toBean(cacheValue,
-                    new TypeReference<Page<GeneratorVO>>() {
-                    },
-                    false);
-            return ResultUtils.success(generatorVOPage);
+//        String cacheValue = cacheManager.get(cacheKey);
+        // 性能优化 之 计算优化
+        Object objectCache = cacheManager.getObjectCache(cacheKey);
+        if (objectCache != null) {
+//            Page<GeneratorVO> generatorVOPage = JSONUtil.toBean(cacheValue,
+//                    new TypeReference<Page<GeneratorVO>>() {
+//                    },
+//                    false);
+//            return ResultUtils.success(generatorVOPage);
+            // 如果缓存中有objectCache，则转为GeneratorVO后返回
+            return ResultUtils.success((Page<GeneratorVO>) objectCache);
+
         }
 
 
@@ -289,7 +294,9 @@ public class GeneratorController {
 //        return ResultUtils.success(generatorVOPage);
 
         // 如果缓存没有，则写入多级缓存
-        cacheManager.put(cacheKey, JSONUtil.toJsonStr(generatorVOPage));
+//        cacheManager.put(cacheKey, JSONUtil.toJsonStr(generatorVOPage));
+        // 计算优化，去掉toJsonStr
+        cacheManager.put(cacheKey,generatorVOPage);
         return ResultUtils.success(generatorVOPage);
     }
 

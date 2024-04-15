@@ -10,6 +10,7 @@ package com.wenjelly.generatorbackend.manager;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -29,27 +30,48 @@ public class CacheManager {
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
-    // 本地缓存
-    Cache<String, String> localCache = Caffeine.newBuilder()
+    @Resource
+    private RedisTemplate<String,Object> redisTemplate;
+
+    // 本地缓存 (存储字符串)
+    Cache<String, String> localCacheByString = Caffeine.newBuilder()
+            .expireAfterWrite(100, TimeUnit.MINUTES)
+            .maximumSize(10_000)
+            .build();
+    // 本地缓存 (存储对象)
+    Cache<String, Object> localCacheByObject = Caffeine.newBuilder()
             .expireAfterWrite(100, TimeUnit.MINUTES)
             .maximumSize(10_000)
             .build();
 
     /**
-     * 写缓存
+     * 写缓存，通过字符串来存储
      *
      * @param key
      * @param value
      */
     public void put(String key, String value) {
         // 往本地写入缓存
-        localCache.put(key, value);
+        localCacheByString.put(key, value);
         // 往Redis写入缓存
         stringRedisTemplate.opsForValue().set(key, value, 120, TimeUnit.MINUTES);
     }
 
     /**
-     * 读缓存
+     * 写缓存，通过对象来存储，可以提高计算优化
+     *
+     * @param key
+     * @param object
+     */
+    public void put(String key, Object object) {
+        // 往本地写入缓存
+        localCacheByObject.put(key, object);
+        // 往Redis写入缓存
+        redisTemplate.opsForValue().set(key, object, 120, TimeUnit.MINUTES);
+    }
+
+    /**
+     * 读缓存，返回字符串类型
      *
      * @param key
      * @return
@@ -57,7 +79,7 @@ public class CacheManager {
     public String get(String key) {
 
         // 先从本地读取缓存
-        String value = localCache.getIfPresent(key);
+        String value = localCacheByString.getIfPresent(key);
         if (value != null) {
             return value;
         }
@@ -66,11 +88,36 @@ public class CacheManager {
         value = stringRedisTemplate.opsForValue().get(key);
         if (value != null) {
             // 将从 Redis 获取的值放入本地缓存
-            localCache.put(key, value);
+            localCacheByString.put(key, value);
         }
 
         return value;
     }
+
+    /**
+     * 读缓存，返回对象类型
+     *
+     * @param key
+     * @return
+     */
+    public Object getObjectCache(String key) {
+
+        // 先从本地读取缓存
+        Object object = localCacheByObject.getIfPresent(key);
+        if (object != null) {
+            return object;
+        }
+
+        // 如果本地缓存为空则读取Redis的缓存
+        object = redisTemplate.opsForValue().get(key);
+        if (object != null) {
+            // 将从 Redis 获取的值放入本地缓存
+            localCacheByObject.put(key, object);
+        }
+
+        return object;
+    }
+
 
     /**
      * 移除缓存
@@ -79,9 +126,11 @@ public class CacheManager {
      */
     public void delete(String key) {
         // 先移除本地缓存
-        localCache.invalidate(key);
+        localCacheByString.invalidate(key);
+        localCacheByObject.invalidate(key);
         // 再移除Redis缓存
         stringRedisTemplate.delete(key);
+        redisTemplate.delete(key);
 
 
     }
