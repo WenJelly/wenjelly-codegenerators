@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 帖子服务实现
+ * 生成器服务实现
  */
 @Service
 @Slf4j

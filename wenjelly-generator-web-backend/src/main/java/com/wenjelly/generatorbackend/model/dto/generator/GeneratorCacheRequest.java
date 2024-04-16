@@ -14,16 +14,14 @@ import java.io.Serializable;
 @Data
 public class GeneratorCacheRequest implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
      * 生成器的id
      */
     private Long id;
-
     /**
      * 生成器在对象存储的地址
      */
     private String distPath;
-
-    private static final long serialVersionUID = 1L;
 
 }

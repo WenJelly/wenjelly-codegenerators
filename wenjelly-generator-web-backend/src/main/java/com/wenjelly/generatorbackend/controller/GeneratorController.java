@@ -2,7 +2,6 @@ package com.wenjelly.generatorbackend.controller;
 
 import cn.hutool.core.codec.Base64Encoder;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
@@ -35,7 +34,6 @@ import com.wenjelly.makerplus.meta.Meta;
 import com.wenjelly.makerplus.meta.MetaValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -60,21 +58,28 @@ import java.util.concurrent.CompletableFuture;
 public class GeneratorController {
 
     @Resource
+    CacheManager cacheManager;
+    @Resource
     private GeneratorService generatorService;
-
     @Resource
     private UserService userService;
-
     @Resource
     private CosManager cosManager;
 
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
-
-    @Resource
-    CacheManager cacheManager;
-
     // region 增删改查
+
+    /**
+     * 获取分页缓存的Redis Key
+     *
+     * @param generatorQueryRequest
+     * @return
+     */
+    public static String getPageCacheKey(GeneratorQueryRequest generatorQueryRequest) {
+        String jsonStr = JSONUtil.toJsonStr(generatorQueryRequest);
+        String base64 = Base64Encoder.encode(jsonStr);
+        String key = "generator:page:" + base64;
+        return key;
+    }
 
     /**
      * 创建
@@ -296,7 +301,7 @@ public class GeneratorController {
         // 如果缓存没有，则写入多级缓存
 //        cacheManager.put(cacheKey, JSONUtil.toJsonStr(generatorVOPage));
         // 计算优化，去掉toJsonStr
-        cacheManager.put(cacheKey,generatorVOPage);
+        cacheManager.put(cacheKey, generatorVOPage);
         return ResultUtils.success(generatorVOPage);
     }
 
@@ -323,7 +328,6 @@ public class GeneratorController {
                 generatorService.getQueryWrapper(generatorQueryRequest));
         return ResultUtils.success(generatorService.getGeneratorVOPage(generatorPage, request));
     }
-
 
     /**
      * 编辑（用户）
@@ -579,7 +583,6 @@ public class GeneratorController {
 
     }
 
-
     /**
      * 制作代码生成器
      *
@@ -653,7 +656,6 @@ public class GeneratorController {
         });
     }
 
-
     /**
      * 将所需的缓存文件下载到服务器本地
      *
@@ -712,20 +714,6 @@ public class GeneratorController {
         String tempPath = String.format("%s/.temp/cache/%s", property, id);
         String zipPath = String.format("%s/%s", tempPath, distPath);
         return zipPath;
-    }
-
-
-    /**
-     * 获取分页缓存的Redis Key
-     *
-     * @param generatorQueryRequest
-     * @return
-     */
-    public static String getPageCacheKey(GeneratorQueryRequest generatorQueryRequest) {
-        String jsonStr = JSONUtil.toJsonStr(generatorQueryRequest);
-        String base64 = Base64Encoder.encode(jsonStr);
-        String key = "generator:page:" + base64;
-        return key;
     }
 
 }

@@ -27,12 +27,6 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class CacheManager {
 
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
-
-    @Resource
-    private RedisTemplate<String,Object> redisTemplate;
-
     // 本地缓存 (存储字符串)
     Cache<String, String> localCacheByString = Caffeine.newBuilder()
             .expireAfterWrite(100, TimeUnit.MINUTES)
@@ -43,6 +37,10 @@ public class CacheManager {
             .expireAfterWrite(100, TimeUnit.MINUTES)
             .maximumSize(10_000)
             .build();
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 写缓存，通过字符串来存储
