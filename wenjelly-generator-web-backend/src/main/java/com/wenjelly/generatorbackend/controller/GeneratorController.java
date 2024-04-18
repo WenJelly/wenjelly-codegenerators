@@ -71,22 +71,21 @@ public class GeneratorController {
     /**
      * 获取分页缓存的Redis Key
      *
-     * @param generatorQueryRequest
-     * @return
+     * @param generatorQueryRequest 生成器查询请求包装类
+     * @return 返回封装好的key，用于Redis的Key
      */
     public static String getPageCacheKey(GeneratorQueryRequest generatorQueryRequest) {
         String jsonStr = JSONUtil.toJsonStr(generatorQueryRequest);
         String base64 = Base64Encoder.encode(jsonStr);
-        String key = "generator:page:" + base64;
-        return key;
+        return "generator:page:" + base64;
     }
 
     /**
      * 创建
      *
-     * @param generatorAddRequest
-     * @param request
-     * @return
+     * @param generatorAddRequest 创建生成器包装类
+     * @param request             请求
+     * @return 返回执行码
      */
     @PostMapping("/add")
     public BaseResponse<Long> addGenerator(@RequestBody GeneratorAddRequest generatorAddRequest, HttpServletRequest request) {
@@ -120,9 +119,9 @@ public class GeneratorController {
     /**
      * 删除
      *
-     * @param deleteRequest
-     * @param request
-     * @return
+     * @param deleteRequest 删除生成器请求包装类
+     * @param request       请求
+     * @return 返回执行码
      */
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteGenerator(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
@@ -145,8 +144,8 @@ public class GeneratorController {
     /**
      * 更新（仅管理员）
      *
-     * @param generatorUpdateRequest
-     * @return
+     * @param generatorUpdateRequest 更新生成器请求包装类
+     * @return 返回执行码
      */
     @PostMapping("/update")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
@@ -173,8 +172,8 @@ public class GeneratorController {
     /**
      * 根据 id 获取
      *
-     * @param id
-     * @return
+     * @param id 生成器id
+     * @return 生成器包装类
      */
     @GetMapping("/get/vo")
     public BaseResponse<GeneratorVO> getGeneratorVOById(long id, HttpServletRequest request) {
@@ -191,8 +190,8 @@ public class GeneratorController {
     /**
      * 分页获取列表（仅管理员）
      *
-     * @param generatorQueryRequest
-     * @return
+     * @param generatorQueryRequest 分页获取列表包装类
+     * @return 分页列表包装类
      */
     @PostMapping("/list/page")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
@@ -207,9 +206,9 @@ public class GeneratorController {
     /**
      * 分页获取列表（封装类）
      *
-     * @param generatorQueryRequest
-     * @param request
-     * @return
+     * @param generatorQueryRequest 分页获取列表包装类
+     * @param request               请求
+     * @return 分页获取列表VO包装类
      */
     @PostMapping("/list/page/vo")
     public BaseResponse<Page<GeneratorVO>> listGeneratorVOByPage(@RequestBody GeneratorQueryRequest generatorQueryRequest,
@@ -226,9 +225,9 @@ public class GeneratorController {
     /**
      * 快速分页获取列表（封装类）
      *
-     * @param generatorQueryRequest
-     * @param request
-     * @return
+     * @param generatorQueryRequest 快速分页获取列表包装类
+     * @param request               请求
+     * @return 分页VO包装类
      */
     @PostMapping("/list/page/vo/fast")
     public BaseResponse<Page<GeneratorVO>> listGeneratorVOByPageFast(@RequestBody GeneratorQueryRequest generatorQueryRequest,
@@ -240,67 +239,76 @@ public class GeneratorController {
         // 得到缓存key
         String cacheKey = getPageCacheKey(generatorQueryRequest);
         // 先从缓存中读取
-//        String cacheValue = cacheManager.get(cacheKey);
+        //String cacheValue = cacheManager.get(cacheKey);
         // 性能优化 之 计算优化
         Object objectCache = cacheManager.getObjectCache(cacheKey);
         if (objectCache != null) {
-//            Page<GeneratorVO> generatorVOPage = JSONUtil.toBean(cacheValue,
-//                    new TypeReference<Page<GeneratorVO>>() {
-//                    },
-//                    false);
-//            return ResultUtils.success(generatorVOPage);
+            /*
+            计算优化前
+            Page<GeneratorVO> generatorVOPage = JSONUtil.toBean(cacheValue,
+                    new TypeReference<Page<GeneratorVO>>() {
+                    },
+                    false);
+            return ResultUtils.success(generatorVOPage);
+             */
             // 如果缓存中有objectCache，则转为GeneratorVO后返回
             return ResultUtils.success((Page<GeneratorVO>) objectCache);
 
         }
 
 
-        // 性能优化 之 使用Redis缓存
-//        // 优先从Redis缓存里面读取
-//        // 获取Redis缓存Key
-//        String cacheKey = getPageCacheKey(generatorQueryRequest);
-//        // 得到Redis容器（应该）
-//        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
-//        // 从Redis key里面获取缓存内容
-//        String cacheValue = valueOperations.get(cacheKey);
-//        if (StrUtil.isNotBlank(cacheValue)) {
-//            // 说明缓存里面由内容
-//            Page<GeneratorVO> generatorVOPage = JSONUtil.toBean(cacheValue,
-//                    new TypeReference<Page<GeneratorVO>>() {
-//
-//                    },
-//                    false);
-//            return ResultUtils.success(generatorVOPage);
-//        }
+        /* 性能优化 之 使用Redis缓存
+        // 优先从Redis缓存里面读取
+        // 获取Redis缓存Key
+        String cacheKey = getPageCacheKey(generatorQueryRequest);
+        // 得到Redis容器（应该）
+        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+        // 从Redis key里面获取缓存内容
+        String cacheValue = valueOperations.get(cacheKey);
+        if (StrUtil.isNotBlank(cacheValue)) {
+            // 说明缓存里面由内容
+            Page<GeneratorVO> generatorVOPage = JSONUtil.toBean(cacheValue,
+                    new TypeReference<Page<GeneratorVO>>() {
+
+                    },
+                    false);
+            return ResultUtils.success(generatorVOPage);
+        }
+         */
 
         // 限制爬虫
         ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
-//         原始代码，未优化
-//        Page<Generator> generatorPage = generatorService.page(new Page<>(current, size),
-//                generatorService.getQueryWrapper(generatorQueryRequest));
-//        Page<GeneratorVO> generatorVOPage = generatorService.getGeneratorVOPage(generatorPage, request);
+        /*
+        原始代码，未优化
+        Page<Generator> generatorPage = generatorService.page(new Page<>(current, size),
+                generatorService.getQueryWrapper(generatorQueryRequest));
+        Page<GeneratorVO> generatorVOPage = generatorService.getGeneratorVOPage(generatorPage, request);
 
-
+         */
         QueryWrapper<Generator> queryWrapper = generatorService.getQueryWrapper(generatorQueryRequest);
         // 优化查询信息，将不需要的给过滤掉
         queryWrapper.select("id", "name", "description", "tags", "picture", "status", "userId", "createTime", "updateTime");
         Page<Generator> generatorPage = generatorService.page(new Page<>(current, size), queryWrapper);
         Page<GeneratorVO> generatorVOPage = generatorService.getGeneratorVOPage(generatorPage, request);
 
-        // 性能优化 之 将其设置为空值，减少返回给前端的文件大小以及提高性能，因为首页不需要展示这些信息
-//        generatorPage.getRecords().forEach(generatorVO -> {
-//            generatorVO.setFileConfig(null);
-//            generatorVO.setModelConfig(null);
-//        });
+        /* 性能优化 之 将其设置为空值，减少返回给前端的文件大小以及提高性能，因为首页不需要展示这些信息
+        generatorPage.getRecords().forEach(generatorVO -> {
+            generatorVO.setFileConfig(null);
+            generatorVO.setModelConfig(null);
+        });
+
+         */
 
 
-        // 如果缓存没有，则写入缓存
-//        valueOperations.set(cacheKey, JSONUtil.toJsonStr(generatorVOPage), 100, TimeUnit.MINUTES);
-//        return ResultUtils.success(generatorVOPage);
-
+        /* 如果缓存没有，则写入缓存
+        valueOperations.set(cacheKey, JSONUtil.toJsonStr(generatorVOPage), 100, TimeUnit.MINUTES);
+        return ResultUtils.success(generatorVOPage);
         // 如果缓存没有，则写入多级缓存
-//        cacheManager.put(cacheKey, JSONUtil.toJsonStr(generatorVOPage));
+        cacheManager.put(cacheKey, JSONUtil.toJsonStr(generatorVOPage));
         // 计算优化，去掉toJsonStr
+         */
+
+
         cacheManager.put(cacheKey, generatorVOPage);
         return ResultUtils.success(generatorVOPage);
     }
@@ -308,9 +316,9 @@ public class GeneratorController {
     /**
      * 分页获取当前用户创建的资源列表
      *
-     * @param generatorQueryRequest
-     * @param request
-     * @return
+     * @param generatorQueryRequest 分页请求包装类
+     * @param request               请求
+     * @return 返回分页请求VO包装类
      */
     @PostMapping("/my/list/page/vo")
     public BaseResponse<Page<GeneratorVO>> listMyGeneratorVOByPage(@RequestBody GeneratorQueryRequest generatorQueryRequest,
@@ -332,9 +340,9 @@ public class GeneratorController {
     /**
      * 编辑（用户）
      *
-     * @param generatorEditRequest
-     * @param request
-     * @return
+     * @param generatorEditRequest 用户使用编辑功能包装类
+     * @param request              请求
+     * @return 返回信息
      */
     @PostMapping("/edit")
     public BaseResponse<Boolean> editGenerator(@RequestBody GeneratorEditRequest generatorEditRequest, HttpServletRequest request) {
@@ -366,8 +374,8 @@ public class GeneratorController {
      * 文件下载
      *
      * @param id       生成器id
-     * @param request
-     * @param response
+     * @param request  请求
+     * @param response 响应
      */
     @GetMapping("/download")
     public void downloadGeneratorById(long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -414,7 +422,7 @@ public class GeneratorController {
             // 转换成流
             cosObjectInput = cosObject.getObjectContent();
 
-            /**
+            /*
              * 这里使用流式传输来测试性能，结果发现下载速度更慢了，在数据的实时处理比较好
              */
 //            // 设置响应头
@@ -451,24 +459,23 @@ public class GeneratorController {
 
     }
 
-    @PostMapping("/use")
     /**
      * 使用代码生成器
      *
-     * @param generatorUseRequest
-     * @param request
-     * @param response
+     * @param generatorUseRequest 用户使用生成器请求包装类
+     * @param request             请求
+     * @param response            响应
      */
-    public void useGenerator(
-            @RequestBody GeneratorUseRequest generatorUseRequest,
-            HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+    @PostMapping("/use")
+    public void useGenerator(@RequestBody GeneratorUseRequest generatorUseRequest,
+                             HttpServletRequest request,
+                             HttpServletResponse response) throws IOException {
 
         Long id = generatorUseRequest.getId();
         Map<String, Object> dataModel = generatorUseRequest.getDataModel();
 
         // 判断是否登录
-        User loginUser = userService.getLoginUser(request);
+        userService.getLoginUser(request);
         // 得到需要使用的生成器
         Generator generator = generatorService.getById(id);
         if (generator == null) {
@@ -523,7 +530,7 @@ public class GeneratorController {
             Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rwxrwxrwx");
             Files.setPosixFilePermissions(scriptFile.toPath(), permissions);
         } catch (IOException e) {
-
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "权限修改失败");
         }
 
         // 3.创建脚本程序指令，并执行程序
@@ -557,7 +564,7 @@ public class GeneratorController {
             System.out.println("命令执行结束，退出代码为： " + exitCode);
         } catch (Exception e) {
             // 打印错误信息
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "执行生成器脚本错误");
         }
 
@@ -586,9 +593,9 @@ public class GeneratorController {
     /**
      * 制作代码生成器
      *
-     * @param generatorMakeRequest
-     * @param request
-     * @param response
+     * @param generatorMakeRequest 用户制作代码生成器请求包装类
+     * @param request              请求
+     * @param response             响应
      */
     @PostMapping("/make")
     public void makeGenerator(
@@ -601,8 +608,8 @@ public class GeneratorController {
         String zipFilePath = generatorMakeRequest.getZipFilePath();
         Meta meta = generatorMakeRequest.getMeta();
 
-        // 需要登录
-        User loginUser = userService.getLoginUser(request);
+        // 需要登录，这里会进行验证
+        userService.getLoginUser(request);
         // 2）创建独立工作空间，下载压缩包到本地
         if (StrUtil.isBlank(zipFilePath)) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "压缩包文件不存在");
@@ -637,7 +644,7 @@ public class GeneratorController {
         try {
             zipGenerator.doGenerator(meta, outputPath);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "制作失败");
         }
         // 6）下载压缩的产物包文件
@@ -657,18 +664,14 @@ public class GeneratorController {
     }
 
     /**
-     * 将所需的缓存文件下载到服务器本地
+     * 将文件下载到服务器本地（缓存）
      *
-     * @param generatorCacheRequest
-     * @param request
-     * @param response
+     * @param generatorCacheRequest 下载缓存文件的请求request
      */
     @PostMapping("/cache")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public void downCacheGeneratorById(
-            @RequestBody GeneratorCacheRequest generatorCacheRequest,
-            HttpServletRequest request,
-            HttpServletResponse response
+            @RequestBody GeneratorCacheRequest generatorCacheRequest
     ) {
 
         if (generatorCacheRequest == null || generatorCacheRequest.getId() <= 0) {
@@ -703,17 +706,18 @@ public class GeneratorController {
     }
 
     /**
-     * 获得缓存文件的存放位置
+     * 根据id和对象存储的路径获得缓存文件存放的位置
      *
-     * @param id
-     * @param distPath
-     * @return
+     * @param id       文件的id
+     * @param distPath 文件在对象存储中存放的路径
+     * @return 缓存文件存放的位置
      */
     public String getCacheKey(Long id, String distPath) {
+
         String property = System.getProperty("user.dir");
         String tempPath = String.format("%s/.temp/cache/%s", property, id);
-        String zipPath = String.format("%s/%s", tempPath, distPath);
-        return zipPath;
+        // 缓存文件存储的目录
+        return String.format("%s/%s", tempPath, distPath);
     }
 
 }
