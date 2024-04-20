@@ -61,11 +61,11 @@ public class DynamicFileGenerator {
     /**
      * 重写方法，优化了一下模板文件路径的查找
      *
-     * @param relativeInputPath
-     * @param outputPath
-     * @param model
-     * @throws IOException
-     * @throws TemplateException
+     * @param relativeInputPath template模板文件路径
+     * @param outputPath        生成出来的文件路径
+     * @param model             数据模型
+     * @throws IOException       IOE异常
+     * @throws TemplateException Template异常
      */
     public static void doGenerate(String relativeInputPath, String outputPath, Object model) throws IOException, TemplateException {
         // new 出 Configuration 对象，参数为FreeMarker版本号

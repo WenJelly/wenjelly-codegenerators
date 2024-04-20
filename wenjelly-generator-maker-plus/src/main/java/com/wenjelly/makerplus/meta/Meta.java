@@ -24,7 +24,7 @@ public class Meta implements Serializable {
     private ModelConfigBean modelConfig;
 
     @Data
-    public static class FileConfigBean implements Serializable{
+    public static class FileConfigBean implements Serializable {
         private String inputRootPath;
         private String outputRootPath;
         private String sourceRootPath;
@@ -32,7 +32,7 @@ public class Meta implements Serializable {
         private List<FileInfo> files;
 
         @Data
-        public static class FileInfo implements Serializable{
+        public static class FileInfo implements Serializable {
             private String inputPath;
             private String outputPath;
             private String type;
@@ -45,11 +45,11 @@ public class Meta implements Serializable {
     }
 
     @Data
-    public static class ModelConfigBean implements Serializable{
+    public static class ModelConfigBean implements Serializable {
         private List<ModelInfo> models;
 
         @Data
-        public static class ModelInfo implements Serializable{
+        public static class ModelInfo implements Serializable {
             private String fieldName;
             private String type;
             private String description;

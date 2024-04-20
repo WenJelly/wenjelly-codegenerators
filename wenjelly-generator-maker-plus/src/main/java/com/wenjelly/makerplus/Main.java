@@ -17,9 +17,9 @@ public class Main {
 
     public static void main(String[] args) throws TemplateException, IOException, InterruptedException {
         // 制作zip生成器，需要什么生成器就new对应的生成器类
+        // MainGeneratorTemplate generator = new DistMainGenerator();
         MainGeneratorTemplate generator = new ZipGenerator();
-//        MainGeneratorTemplate generator = new DistMainGenerator();
         // 执行
-        generator.doGenerator();
+        generator.doGenerate();
     }
 }

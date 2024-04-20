@@ -35,7 +35,6 @@ import com.wenjelly.makerplus.meta.MetaValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -519,8 +518,10 @@ public class GeneratorController {
 
         // 开始执行脚本程序
         // 1.找到脚本程序所在位置，只递归俩层，正常来说脚本文件不会在太深的位置，windows系统的脚本文件是以.bat后缀
-        File scriptFile = FileUtil.loopFiles(unzipDistDir, 2, null).stream()
-                .filter(file -> file.isFile() && "generator".equals(file.getName()))
+        File scriptFile = FileUtil.loopFiles(unzipDistDir, 2, null)
+                .stream()
+                .filter(file -> file.isFile()
+                        && "generator.bat".equals(file.getName()))
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
 
@@ -530,7 +531,7 @@ public class GeneratorController {
             Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rwxrwxrwx");
             Files.setPosixFilePermissions(scriptFile.toPath(), permissions);
         } catch (IOException e) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "权限修改失败");
+//            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "权限修改失败");
         }
 
         // 3.创建脚本程序指令，并执行程序
@@ -540,10 +541,10 @@ public class GeneratorController {
         String scriptAbsolutePath = scriptDir.getAbsolutePath().replace("\\", "/");
 
         // 构造命令，这里如果是MAC或者LINUX要使用'./generator'
-        String[] command = new String[]{scriptAbsolutePath, "./generator", "json-generate", "--file=" + dataModelFilePath};
+        String[] commands = new String[]{scriptAbsolutePath, "./generator", "json-generate", "--file=" + dataModelFilePath};
 
         // 创建脚本执行类
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        ProcessBuilder processBuilder = new ProcessBuilder(commands);
         // 脚本在scriptDir目录下执行
         processBuilder.directory(scriptDir);
 

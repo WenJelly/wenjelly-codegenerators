@@ -14,25 +14,30 @@ import java.io.*;
  */
 public class JarGenerator {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        doGenerate("D:\\Development\\IDEAJavaProjects\\wenjelly-generators\\wenjelly-generator-makerplus\\generated\\acm-template-generator");
-    }
-
+    /**
+     * 构建jar包
+     *
+     * @param projectDir 项目文件夹位置
+     * @throws IOException          IOE异常
+     * @throws InterruptedException 构建异常
+     */
     public static void doGenerate(String projectDir) throws IOException, InterruptedException {
         // 清理之前的构建并打包
         // 注意不同的操作系统，执行的指令不同
+        // Windows指令
         String winMavenCommand = "mvn.cmd clean package -DskipTests=true";
+        // 其他操作系统指令
         String otherMavenCommand = "mvn clean package -DskipTests=true";
+        // 如果运行在服务器上，则需要将 winMavenCommand 修改成 otherMavenCommand
         String mavenCommand = winMavenCommand;
 
         // 这里一定要拆分，以空格拆分
         ProcessBuilder processBuilder = new ProcessBuilder(mavenCommand.split(" "));
         processBuilder.directory(new File(projectDir));
-
+        // 执行指令
         Process process = processBuilder.start();
 
         // 读取命令的输出
-
         InputStream inputStream = process.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;

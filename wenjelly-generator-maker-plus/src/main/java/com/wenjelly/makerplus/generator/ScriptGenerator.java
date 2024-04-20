@@ -18,6 +18,12 @@ import java.nio.charset.StandardCharsets;
  */
 public class ScriptGenerator {
 
+    /**
+     * 封装脚本
+     *
+     * @param outputPath 脚本输出位置
+     * @param jarPath    jar包所在位置
+     */
     public static void doGenerate(String outputPath, String jarPath) {
         // 直接写入脚本文件
         // linux

@@ -8,9 +8,9 @@ package com.wenjelly.makerplus.main;
  */
 
 public class DistMainGenerator extends MainGeneratorTemplate {
-
     @Override
-    protected String doDistDir(String outputRootPath, String jarPath) {
-        return "制作简约生成器";
+    protected String buildDist(String outputPath, String sourceCopyDestPath, String jarPath, String shellOutputFilePath) {
+        System.out.println("制作简约生成器");
+        return "";
     }
 }

@@ -144,7 +144,7 @@ public class TemplateMaker {
      * @return 返回新的元信息文件
      */
     private static Meta makeMetaJson(Meta newMeta, String sourceRootPath, ArrayList<Meta.FileConfigBean.FileInfo> newFileInfoList, ArrayList<Meta.ModelConfigBean.ModelInfo> newModelInfoList, TemplateMakerOutputConfig templateMakerOutputConfig) {
-        // 5.生成配置文件
+        // 生成配置文件
         String metaJsonOutputPath = sourceRootPath + File.separator + "meta.json";
 
         if (FileUtil.exist(metaJsonOutputPath)) {
