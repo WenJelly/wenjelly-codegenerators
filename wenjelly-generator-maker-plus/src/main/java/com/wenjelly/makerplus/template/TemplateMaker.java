@@ -12,7 +12,6 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
-import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -29,45 +28,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TemplateMaker {
-
-    /**
-     * 测试
-     */
-    public static void main(String[] args) {
-
-        // 第读取配置文件
-        String springBootMeta = ResourceUtil.readUtf8Str("springbootmeta1.json");
-        // 将配置文件转换成对象
-        TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        // 制作模板与生成配置文件，下同
-        makeTemplate(templateMakerConfig);
-
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta2.json");
-        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        makeTemplate(templateMakerConfig);
-
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta3.json");
-        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        makeTemplate(templateMakerConfig);
-
-
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta4.json");
-        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        makeTemplate(templateMakerConfig);
-
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta5.json");
-        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        makeTemplate(templateMakerConfig);
-
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta6.json");
-        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        makeTemplate(templateMakerConfig);
-
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta7.json");
-        templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
-        makeTemplate(templateMakerConfig);
-
-    }
 
     /**
      * 制作模板
@@ -89,7 +49,7 @@ public class TemplateMaker {
     }
 
     /**
-     * 制作模板
+     * 制作生成代码模板
      *
      * @param newMeta                  新的元信息文件，里面包含文件信息，模组信息
      * @param id                       工作空间的id，用于查看当前状态

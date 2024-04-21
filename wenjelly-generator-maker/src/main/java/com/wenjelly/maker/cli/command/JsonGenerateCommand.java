@@ -10,14 +10,11 @@ package com.wenjelly.maker.cli.command;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONUtil;
 import com.wenjelly.maker.generator.file.FileGenerator;
-import com.wenjelly.maker.main.MainGeneratorTemplate;
 import com.wenjelly.maker.model.DataModel;
 import lombok.Data;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-import java.io.File;
 import java.util.concurrent.Callable;
 
 /**
@@ -27,7 +24,7 @@ import java.util.concurrent.Callable;
 @Data
 public class JsonGenerateCommand implements Callable<Integer> {
 
-    @Option(names = {"-f","--file"},arity = "0..1", description = "json文件路径", interactive = true, echo = true)
+    @Option(names = {"-f", "--file"}, arity = "0..1", description = "json文件路径", interactive = true, echo = true)
     private String filePath;
 
     @Override

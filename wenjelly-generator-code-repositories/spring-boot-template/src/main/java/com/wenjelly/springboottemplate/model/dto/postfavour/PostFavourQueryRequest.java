@@ -19,15 +19,13 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 public class PostFavourQueryRequest extends PageRequest implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
      * 帖子查询请求
      */
     private PostQueryRequest postQueryRequest;
-
     /**
      * 用户 id
      */
     private Long userId;
-
-    private static final long serialVersionUID = 1L;
 }

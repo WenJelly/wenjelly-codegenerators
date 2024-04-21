@@ -15,7 +15,6 @@ import com.wenjelly.maker.meta.enums.FileGenerateTypeEnum;
 import com.wenjelly.maker.meta.enums.FileTypeEnum;
 import com.wenjelly.maker.meta.enums.ModelTypeEnum;
 
-
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;

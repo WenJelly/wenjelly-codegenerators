@@ -41,13 +41,11 @@ import java.util.List;
 @Slf4j
 public class PostController {
 
+    private final static Gson GSON = new Gson();
     @Resource
     private PostService postService;
-
     @Resource
     private UserService userService;
-
-    private final static Gson GSON = new Gson();
 
     // region 增删改查
 

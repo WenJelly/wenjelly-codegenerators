@@ -15,10 +15,9 @@ import java.io.Serializable;
 @Data
 public class PostFavourAddRequest implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
      * 帖子 id
      */
     private Long postId;
-
-    private static final long serialVersionUID = 1L;
 }

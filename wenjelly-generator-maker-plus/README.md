@@ -100,6 +100,17 @@ makeTemplate(templateMakerConfig);
 > 作者：WenJelly
 >
 >日期：2024-3-23 17:51
+> 
+
+制作代码生成器需要什么？
+1. meta.json文件
+
+
+meta.json文件如何得到？
+通过模板制作文件得到源代码的ftl + meta.json文件
+使用代码生成器需要什么？
+1. 输入修改的参数。
+
 
 
 

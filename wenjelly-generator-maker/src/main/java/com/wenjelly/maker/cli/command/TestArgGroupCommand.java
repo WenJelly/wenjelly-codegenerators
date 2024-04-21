@@ -14,24 +14,25 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-
 import java.util.concurrent.Callable;
 
 @Command(name = "generate", description = "生成代码", mixinStandardHelpOptions = true)
 @Data
 public class TestArgGroupCommand implements Callable {
 
+    static DataModel.MainTemplate mainTemplate = new DataModel.MainTemplate();
     @Option(names = {"-needGit"}, description = "是否生成git", arity = "0..1", interactive = true, prompt = "请输入是否生成git相关文件", echo = true)
     private boolean needGit;
-
     /*
     是否创建while循环
      */
     @Option(names = {"-l", "--loop"}, description = "是否循环", arity = "0..1", interactive = true, prompt = "请输入是否循环: ", echo = true)
     private boolean loop;
 
-
-    static DataModel.MainTemplate mainTemplate = new DataModel.MainTemplate();
+    public static void main(String[] args) {
+        CommandLine commandLine = new CommandLine(TestArgGroupCommand.class);
+        commandLine.execute("-l");
+    }
 
     @Override
     public Object call() throws Exception {
@@ -60,11 +61,6 @@ public class TestArgGroupCommand implements Callable {
             mainTemplate.author = author;
             mainTemplate.outputText = outputText;
         }
-    }
-
-    public static void main(String[] args) {
-        CommandLine commandLine = new CommandLine(TestArgGroupCommand.class);
-        commandLine.execute("-l");
     }
 
 }

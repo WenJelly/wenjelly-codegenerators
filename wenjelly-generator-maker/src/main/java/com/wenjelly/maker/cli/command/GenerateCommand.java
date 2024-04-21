@@ -9,7 +9,6 @@ package com.wenjelly.maker.cli.command;
 
 
 import cn.hutool.core.bean.BeanUtil;
-
 import com.wenjelly.maker.generator.file.FileGenerator;
 import com.wenjelly.maker.model.DataModel;
 import lombok.Data;

@@ -3,7 +3,7 @@
   "templateMakerFileConfig": {
     "files": [
       {
-        "path": "src/main/java/com/yupi/springbootinit/config/Knife4jConfig.java",
+        "path": "src/main/java/com/wenjelly/springboottemplate/config/Knife4jConfig.java",
         "condition": "needDocs"
       }
     ]

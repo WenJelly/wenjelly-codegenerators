@@ -35,6 +35,7 @@ import com.wenjelly.makerplus.meta.MetaValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -643,7 +644,7 @@ public class GeneratorController {
         // 5）调用 maker 方法制作生成器
         MainGeneratorTemplate zipGenerator = new ZipGenerator();
         try {
-            zipGenerator.doGenerator(meta, outputPath);
+            zipGenerator.doGenerate(meta, outputPath);
         } catch (Exception e) {
 //            e.printStackTrace();
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "制作失败");

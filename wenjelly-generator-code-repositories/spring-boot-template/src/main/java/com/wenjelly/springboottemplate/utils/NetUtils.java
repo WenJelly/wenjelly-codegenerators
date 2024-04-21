@@ -9,7 +9,6 @@ package com.wenjelly.springboottemplate.utils;
  */
 
 
-
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 

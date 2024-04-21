@@ -3,7 +3,7 @@
   "templateMakerFileConfig": {
     "files": [
       {
-        "path": "src/main/java/com/yupi/springbootinit/config/CorsConfig.java",
+        "path": "src/main/java/com/wenjelly/springboottemplate/config/CorsConfig.java",
         "condition": "needCors"
       }
     ]

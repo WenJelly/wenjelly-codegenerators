@@ -10,11 +10,10 @@ package com.wenjelly.maker.main;
 import freemarker.template.TemplateException;
 import org.junit.jupiter.api.Test;
 
-
 import java.io.IOException;
 
 
-public class DistMainGenerator extends MainGeneratorTemplate{
+public class DistMainGenerator extends MainGeneratorTemplate {
 
     @Test
     public void test() throws TemplateException, IOException, InterruptedException {
