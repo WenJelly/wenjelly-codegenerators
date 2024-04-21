@@ -18,56 +18,24 @@ import java.io.IOException;
  */
 public class DynamicAndStaticGenerator {
 
-    private static String property = System.getProperty("user.dir"); //wenjelly-generators
+    public static void doGenerate(MainTemplateConfig model) throws TemplateException, IOException {
 
-    /*
-     *静态目标输入位置
-     */
-    private static String staticInputPath;
-    /**
-     * 静态目标输出位置
-     */
-    private static String staticOutputPath;
-
-    /**
-     * 动态模板输入位置
-     */
-    private static String dynamicInputPath;
-    /**
-     * 动态模板输出位置
-     */
-    private static String dynamicOutputPath;
-
-    /**
-     * 完整生成（静态+动态）
-     *
-     * @param args
-     */
-    public static void main(String[] args) throws TemplateException, IOException {
-
-    }
-
-    public void doGenerate(MainTemplateConfig model) throws TemplateException, IOException {
-        // 获取静态的输入位置
-        staticInputPath = property + File.separator + "wenjelly-generator-demo-projects"
-                + File.separator + "acm-template";
-        // 获取静态的输出位置
-        staticOutputPath = property + File.separator + "wenjelly-generator-basic"
-                + File.separator + "src/main/resources/templatesout";
+        // 模块目录根位置wenjelly-generators-basic
+        String property = System.getProperty("user.dir");
+        // 静态文件位置
+        String staticInputPath = property + File.separator + "src/main/resources/templates/acm-template";
+        // 静态文件输出位置
+        String staticOutputPath = property + File.separator + "src/main/resources/templatesout";
         // 生成静态文件
         StaticGenerator.copyFileByHuTool(staticInputPath, staticOutputPath);
 
-
-        // 获取动态输入位置
-        dynamicInputPath = property + File.separator + "wenjelly-generator-basic"
-                + File.separator + "src/main/resources/templates/acmtemplate.java.ftl";
-        // 获取动态输出位置
-        dynamicOutputPath = property + File.separator + "wenjelly-generator-basic"
-                + File.separator + "src/main/resources/templatesout"
-                + File.separator + "acm-template/src/main/java/com/wenjelly/acm/MainTemplate.java";
+        // 模板文件位置
+        String dynamicInputPath = property + File.separator + "src/main/resources/templates/Acmtemplate.java.ftl";
+        // 目标输出位置
+        String dynamicOutputPath = property + File.separator + "src/main/resources/templatesout"
+                + File.separator + "acm-template/src/main/java/com/wenjelly/acm/Acmtemplate.java";
         // 生成动态文件
         DynamicGenerator.doGenerate(dynamicInputPath, dynamicOutputPath, model);
-
     }
 
 

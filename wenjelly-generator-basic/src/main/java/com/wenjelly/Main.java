@@ -12,6 +12,7 @@ import com.wenjelly.cli.CommandExecutor;
 public class Main {
     public static void main(String[] args) {
         CommandExecutor commandExecutor = new CommandExecutor();
+        args = new String[] {"generate","-a","wenjelly","-o","你好","-l","false"};
         commandExecutor.doExecute(args);
     }
 }

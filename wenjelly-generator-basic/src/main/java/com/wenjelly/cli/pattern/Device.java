@@ -15,7 +15,6 @@ public class Device {
         this.name = name;
     }
 
-
     public void turnOn() {
         System.out.println("电视机打开了");
     }

@@ -10,7 +10,6 @@ package com.wenjelly.cli.pattern;
 public class RemoteControl {
 
     private static Command command;
-
     // 传入用户按下了什么按钮
     public void setCommand(Command command) {
         this.command = command;

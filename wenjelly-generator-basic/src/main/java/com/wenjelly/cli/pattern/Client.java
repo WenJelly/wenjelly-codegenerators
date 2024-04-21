@@ -13,15 +13,11 @@ public class Client {
         Device tv = new Device("tv");
         TurnOffCommand turnOffCommand = new TurnOffCommand(tv);
         TurnOnCommand turnOnCommand = new TurnOnCommand(tv);
-
         // 也可以创建多个电视机
         Device stereo = new Device("stereo");
-
         TurnOffCommand turnOffCommand1 = new TurnOffCommand(stereo);
         TurnOnCommand turnOnCommand1 = new TurnOnCommand(stereo);
-
         RemoteControl remoteControl = new RemoteControl();
-
         // 开机
         remoteControl.setCommand(turnOnCommand);
         remoteControl.pressButton();

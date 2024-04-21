@@ -7,9 +7,8 @@ package com.wenjelly.cli.command;
  * @author WenJelly
  */
 
-
-import cn.hutool.Hutool;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.resource.ClassPathResource;
 import picocli.CommandLine.Command;
 
 import java.io.File;
@@ -19,12 +18,10 @@ import java.util.List;
 public class ListCommand implements Runnable {
     @Override
     public void run() {
-        // 获取用户当前的目录
-        String property = System.getProperty("user.dir");
 
-        File parentFile = new File(property);
+        ClassPathResource classPathResource = new ClassPathResource("");
+        String absolutePath = classPathResource.getAbsolutePath() + File.separator + "templates/acm-template";
 
-        String absolutePath = new File(parentFile, "/wenjelly-generator-demo-projects/acm-template").getAbsolutePath();
         // hutool工具类，可以遍历目录
         List<File> files = FileUtil.loopFiles(absolutePath);
         for (File f : files) {

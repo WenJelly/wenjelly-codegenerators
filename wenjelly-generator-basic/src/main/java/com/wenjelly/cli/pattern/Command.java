@@ -8,7 +8,6 @@ package com.wenjelly.cli.pattern;
  */
 
 public interface Command {
-
     void execute();
 
 }

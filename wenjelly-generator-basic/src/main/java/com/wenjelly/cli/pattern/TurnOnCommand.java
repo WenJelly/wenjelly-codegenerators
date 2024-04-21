@@ -11,7 +11,6 @@ public class TurnOnCommand implements Command {
 
     // 电视机
     private Device device;
-
     public TurnOnCommand(Device device) {
         this.device = device;
     }

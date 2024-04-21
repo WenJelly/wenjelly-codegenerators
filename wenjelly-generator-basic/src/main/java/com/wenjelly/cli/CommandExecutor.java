@@ -1,8 +1,8 @@
 package com.wenjelly.cli;
 
 import com.wenjelly.cli.command.ConfigCommand;
-import com.wenjelly.cli.command.ListCommand;
 import com.wenjelly.cli.command.GenerateCommand;
+import com.wenjelly.cli.command.ListCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -16,6 +16,7 @@ import picocli.CommandLine.Command;
 public class CommandExecutor implements Runnable {
 
     private CommandLine commandLine;
+
 
     {
         commandLine = new CommandLine(this)

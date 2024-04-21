@@ -25,20 +25,6 @@ public class Login implements Callable<Integer> {
     @Option(names = {"-cp", "--checkPassword"}, description = "check password", arity = "0..1", interactive = true, prompt = "请再次输入密码: ", echo = false)
     String checkPassword;
 
-    /**
-     * 等同于Run方法
-     *
-     * @return 返回值，一般用于返回结果的整数形式
-     * @throws Exception 异常
-     */
-    @Override
-    public Integer call() throws Exception {
-        System.out.println("username = " + user);
-        System.out.println("password = " + password);
-        System.out.println("checkPassword = " + checkPassword);
-        return 0;
-    }
-
     public static void main(String[] args) {
 
         // 判断用户输入的指令是否有-p
@@ -63,5 +49,19 @@ public class Login implements Callable<Integer> {
         // 会提示让你输入密码
 //        new CommandLine(new Login()).execute("-u", "wenjelly");
         new CommandLine(new Login()).execute(args);
+    }
+
+    /**
+     * 等同于Run方法
+     *
+     * @return 返回值，一般用于返回结果的整数形式
+     * @throws Exception 异常
+     */
+    @Override
+    public Integer call() throws Exception {
+        System.out.println("username = " + user);
+        System.out.println("password = " + password);
+        System.out.println("checkPassword = " + checkPassword);
+        return 0;
     }
 }
