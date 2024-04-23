@@ -4,7 +4,7 @@
 项目的第一阶段，制作一个**代码生成器**，通过这个生成器来生成一段代码
 
 这是一段示例代码
-```agsl
+```
 /*
  * @time 2024/3/3 9:15
  * @package com.wenjelly
@@ -42,7 +42,7 @@ public class MainTemplate {
 3. 将输出语句" Sum= " 修改成 " 数组元素的和为： "
 
 生成后的代码为：
-```agsl
+```
 /*
  * @time 2024/3/3 9:15
  * @package com.wenjelly
@@ -82,36 +82,39 @@ public class MainTemplate {
 
 ## 快速体验
 
-1. 在``resources``目录下存放了Acm基础算法代码，以及Acm的模板ftl文件，找到``DynamicGenerator``类，查看里面的路径是否正确
-2. 找到``Main``类，在右上角运行键找到编辑按钮
+在``resources``目录下存放了Acm基础算法代码，以及Acm的模板ftl文件，找到``DynamicGenerator``类，查看里面的路径是否正确
 
-   ![img.png](img/img.png)
+找到``Main``类，在右上角运行键找到编辑按钮
 
-   在程序实参那输入想要传输的参数，参数列表可以查看``cli``目录，或输入--help后运行``Main``即可查看
+![img.png](img/img.png)
 
-   ![img_1.png](img/img_1.png)
+在程序实参那输入想要传输的参数，参数列表可以查看``cli``目录，或输入--help后运行``Main``即可查看
 
-   ![img_3.png](img/img_3.png)
+![img_1.png](img/img_1.png)
 
-   想要查看文件列表将--help改成list即可
+运行后可以在控制台看到以下输出
 
-   ![img_4.png](img/img_4.png)
+![img_3.png](img/img_3.png)
 
-   查看配置也是同理
+想要查看文件列表将--help改成list即可
 
-3. 生成目标代码，将程序实参改为 generate -a ${你自己想要输入的参数} -o ${你自己想要输入的参数} -l [true/false];
+![img_4.png](img/img_4.png)
 
-   ![img_5.png](img/img_5.png)
+查看配置也是同理
 
-   运行即可生成目标代码了
+生成目标代码，将程序实参改为 generate -a ${你自己想要输入的参数} -o ${你自己想要输入的参数} -l [true/false];
 
-4. generate对应``GenerateCommand``类，里面有三个参数，-a（--author） 作者，-o（--output）输出语句参数，-l（--loop）是否开启循环
-5. list对应``ListCommand``类，用于遍历项目文件列表
-6. config对应``ConfigCommand``类，用于查看配置
+![img_5.png](img/img_5.png)
+
+运行即可生成目标代码了
+
+generate对应``GenerateCommand``类，里面有三个参数，-a（--author） 作者，-o（--output）输出语句参数，-l（--loop）是否开启循环
+list对应``ListCommand``类，用于遍历项目文件列表
+config对应``ConfigCommand``类，用于查看配置
 >ps:也可以直接通过在``Main``类中设置args参数来进行传参
 
 找到``Main``类，给args直接输入参数，再运行代码即可，无需在配置中设置程序实参了
-```agsl
+```
 public class Main {
     public static void main(String[] args) {
         CommandExecutor commandExecutor = new CommandExecutor();
@@ -183,7 +186,7 @@ Picocli命令行开发代码参考： ``cli``目录
 > 
 > 日期：2024-4-21 17：27
 > 
-> 版本：Code-Generator-Basic 1.0
+> 版本：Code-Generator-Basic 1.1
 
 
 
