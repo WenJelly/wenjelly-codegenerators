@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 模板制作工具类
+ * 源代码模板制作工具类
  */
 public class TemplateMakerUtils {
 

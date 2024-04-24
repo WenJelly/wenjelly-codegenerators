@@ -12,6 +12,9 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * 元信息定义
+ */
 @Data
 public class Meta implements Serializable {
     private String name;

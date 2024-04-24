@@ -35,8 +35,8 @@
         "fieldName": "version",
         "type": "String",
         "description": "接口文档版本",
-        "defaultValue": "1.0",
-        "replaceText": "1.0"
+        "defaultValue": "2.0",
+        "replaceText": "2.0"
       }
     ]
   }

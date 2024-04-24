@@ -11,7 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * 文件过滤配置
+ * 文件过滤规则配置
  */
 @Data
 @Builder

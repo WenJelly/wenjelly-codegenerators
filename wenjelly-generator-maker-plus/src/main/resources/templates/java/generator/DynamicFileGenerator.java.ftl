@@ -7,7 +7,6 @@ package ${basePackage}.generator;
 * @author ${author}
 */
 
-
 import cn.hutool.core.io.FileUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;

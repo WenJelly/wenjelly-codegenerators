@@ -10,7 +10,7 @@ package com.wenjelly.makerplus.template.model;
 import lombok.Data;
 
 /**
- *
+ * 模板制作输出规则
  */
 @Data
 public class TemplateMakerOutputConfig {

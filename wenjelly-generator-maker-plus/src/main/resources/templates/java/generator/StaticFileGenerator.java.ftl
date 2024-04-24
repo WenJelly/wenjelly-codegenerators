@@ -24,4 +24,5 @@ public class StaticFileGenerator {
     public static void copyFileByHuTool(String inputPath, String outputPath) {
         FileUtil.copy(inputPath, outputPath, false);
     }
+
 }

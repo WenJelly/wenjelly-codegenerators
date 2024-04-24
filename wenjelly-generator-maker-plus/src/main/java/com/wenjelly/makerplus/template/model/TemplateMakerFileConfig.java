@@ -11,6 +11,10 @@ import java.util.List;
  * @project wenjelly-generator-maker-plus
  * @author WenJelly
  */
+
+/**
+ * 模板文件配置（文件的输入输出位置等）
+ */
 @Data
 public class TemplateMakerFileConfig {
 

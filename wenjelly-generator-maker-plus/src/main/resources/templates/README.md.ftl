@@ -52,5 +52,4 @@ generator
             <#if modelInfo.abbr??>缩写： -${modelInfo.abbr}</#if>
         </#if>
 
-
 </#list>

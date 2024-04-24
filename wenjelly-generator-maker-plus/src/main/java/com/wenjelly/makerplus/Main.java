@@ -17,39 +17,42 @@ import freemarker.template.TemplateException;
 
 import java.io.IOException;
 
+/**
+ * 测试使用，先通过模板制作将源代码制作成模板并生成元信息配置，再通过元信息配置生成对应的目标生成器，最后通过目标生成器生成目标代码
+ */
 public class Main {
 
     public static void main(String[] args) throws TemplateException, IOException, InterruptedException {
 
         // 第读取配置文件
-        String springBootMeta = ResourceUtil.readUtf8Str("springbootmeta1.json");
+        String springBootMeta = ResourceUtil.readUtf8Str("spring-boot-template-meta-1.json");
         // 将配置文件转换成对象
         TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
         // 制作模板与生成配置文件，下同
         TemplateMaker.makeTemplate(templateMakerConfig);
 
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta2.json");
+        springBootMeta = ResourceUtil.readUtf8Str("spring-boot-template-meta-2.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
         TemplateMaker.makeTemplate(templateMakerConfig);
 
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta3.json");
+        springBootMeta = ResourceUtil.readUtf8Str("spring-boot-template-meta-3.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
         TemplateMaker.makeTemplate(templateMakerConfig);
 
 
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta4.json");
+        springBootMeta = ResourceUtil.readUtf8Str("spring-boot-template-meta-4.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
         TemplateMaker.makeTemplate(templateMakerConfig);
 
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta5.json");
+        springBootMeta = ResourceUtil.readUtf8Str("spring-boot-template-meta-5.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
         TemplateMaker.makeTemplate(templateMakerConfig);
 
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta6.json");
+        springBootMeta = ResourceUtil.readUtf8Str("spring-boot-template-meta-6.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
         TemplateMaker.makeTemplate(templateMakerConfig);
 
-        springBootMeta = ResourceUtil.readUtf8Str("springbootmeta7.json");
+        springBootMeta = ResourceUtil.readUtf8Str("spring-boot-template-meta-7.json");
         templateMakerConfig = JSONUtil.toBean(springBootMeta, TemplateMakerConfig.class);
         TemplateMaker.makeTemplate(templateMakerConfig);
 

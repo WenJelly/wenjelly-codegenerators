@@ -27,6 +27,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 用来制作元信息配置文件，用于生成对应的生成器与目标代码，同时得到源代码的模板
+ */
 public class TemplateMaker {
 
     /**

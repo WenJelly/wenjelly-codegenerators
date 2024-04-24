@@ -11,7 +11,7 @@ import cn.hutool.core.util.ObjectUtil;
 import lombok.Getter;
 
 /**
- * 文件过滤范围枚举
+ * 文件过滤范围枚举类
  */
 @Getter
 public enum FileFilterRangeEnum {

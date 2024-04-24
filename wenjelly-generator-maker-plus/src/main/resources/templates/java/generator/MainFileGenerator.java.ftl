@@ -22,6 +22,7 @@ ${indent}StaticFileGenerator.copyFileByHuTool(inputPath, outputPath);
 ${indent}DynamicFileGenerator.doGenerate(inputPath, outputPath, model);
 </#if>
 </#macro>
+
 /**
  * 核心生成器，生成动态代码和静态代码
  */

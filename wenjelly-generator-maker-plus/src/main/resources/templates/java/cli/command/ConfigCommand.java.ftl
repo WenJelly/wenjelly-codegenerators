@@ -7,7 +7,6 @@ package ${basePackage}.cli.command;
  * @author ${author}
  */
 
-
 import cn.hutool.core.util.ReflectUtil;
 import com.wenjelly.model.DataModel;
 import picocli.CommandLine.Command;

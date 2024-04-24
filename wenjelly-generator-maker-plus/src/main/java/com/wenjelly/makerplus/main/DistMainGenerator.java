@@ -7,6 +7,9 @@ package com.wenjelly.makerplus.main;
  * @author WenJelly
  */
 
+/**
+ * 继承主生成类，重写方法可以不影响其他执行流程的情况下实现新逻辑
+ */
 public class DistMainGenerator extends MainGeneratorTemplate {
     @Override
     protected String buildDist(String outputPath, String sourceCopyDestPath, String jarPath, String shellOutputFilePath) {

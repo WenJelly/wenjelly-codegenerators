@@ -10,6 +10,9 @@ package com.wenjelly.makerplus.template.enums;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.Getter;
 
+/**
+ * 文件过滤规则枚举类
+ */
 @Getter
 public enum FileFilterRuleEnum {
     CONTAINS("包含", "contains"),

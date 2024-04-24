@@ -42,7 +42,7 @@
 内容以``template``包下的``TemplateMakerConfig``类为模板
 例如：
 
-```agsl
+```json
 {
   "id": 1,
   "newMeta": {
@@ -71,7 +71,7 @@
 
 在``TemplateMaker``类下将你的Json配置文件读取并转换为Bean对象，然后将该对象传入makeTemplate方法并执行即可
 
-```agsl
+```algs
 // 第读取配置文件
 String springBootMeta = ResourceUtil.readUtf8Str("${JsonPath}");
 // 将配置文件转换成对象
@@ -97,20 +97,23 @@ makeTemplate(templateMakerConfig);
 正常来说，生成器制作完后能够自动的对项目进行打jar包以及封装称脚本，所有我们只需要进到生成好的``generator``
 包下的项目里面，然后以终端方式打开，执行脚本./generator --help即可
 其余指令可根据--help进行查看
-> 作者：WenJelly
->
->日期：2024-3-23 17:51
-> 
 
 制作代码生成器需要什么？
 1. meta.json文件
-
 
 meta.json文件如何得到？
 通过模板制作文件得到源代码的ftl + meta.json文件
 使用代码生成器需要什么？
 1. 输入修改的参数。
 
+>ps：支持追究制作模板文件，在``Main``中对模板进行了七次追加制作。
+
+
+> 作者：WenJelly
+>
+> 日期：2024-4-24 10：23
+> 
+> 版本：Code-Generator-Maker-Plus 2.5
 
 
 

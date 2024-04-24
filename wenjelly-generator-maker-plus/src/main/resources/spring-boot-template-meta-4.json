@@ -14,7 +14,7 @@
         "fieldName": "needCors",
         "type": "boolean",
         "description": "是否开启跨域功能",
-        "defaultValue": true
+        "defaultValue": false
       }
     ]
   }

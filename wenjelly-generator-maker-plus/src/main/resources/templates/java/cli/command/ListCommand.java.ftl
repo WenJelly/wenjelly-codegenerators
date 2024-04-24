@@ -7,7 +7,6 @@ package ${basePackage}.cli.command;
  * @author ${author}
  */
 
-
 import cn.hutool.core.io.FileUtil;
 import picocli.CommandLine.Command;
 

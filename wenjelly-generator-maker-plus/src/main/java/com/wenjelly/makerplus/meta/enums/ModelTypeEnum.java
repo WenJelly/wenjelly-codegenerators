@@ -10,7 +10,7 @@ package com.wenjelly.makerplus.meta.enums;
 import lombok.Getter;
 
 /**
- * 模型类型枚举
+ * 模型类型枚举类
  */
 @Getter
 public enum ModelTypeEnum {

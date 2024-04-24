@@ -12,7 +12,7 @@
       {
         "fieldName": "basePackage",
         "type": "String",
-        "description": "基础包名",
+        "description": "包名",
         "defaultValue": "com.wenjelly",
         "replaceText": "com.wenjelly"
       }

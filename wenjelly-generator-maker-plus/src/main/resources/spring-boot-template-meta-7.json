@@ -33,8 +33,8 @@
         "fieldName": "password",
         "type": "String",
         "description": "密码",
-        "defaultValue": "123456",
-        "replaceText": "123456"
+        "defaultValue": "root",
+        "replaceText": "root"
       }
     ]
   }

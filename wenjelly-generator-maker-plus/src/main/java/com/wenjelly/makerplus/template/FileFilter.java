@@ -16,14 +16,17 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 文件过滤
+ */
 public class FileFilter {
 
     /**
      * 过滤单个文件
      *
-     * @param filterConfigList
-     * @param file
-     * @return
+     * @param filterConfigList 文件过滤配置
+     * @param file             文件
+     * @return 是否过滤
      */
     public static boolean doSingleFileFilter(File file, List<FileFilterConfig> filterConfigList) {
 
@@ -93,6 +96,13 @@ public class FileFilter {
         return true;
     }
 
+    /**
+     * 过滤一组文件，并返回过滤后的列表
+     *
+     * @param filePath         文件位置
+     * @param filterConfigList 文件过滤配置
+     * @return 文件过滤后的列表
+     */
     public static List<File> doFilter(String filePath, List<FileFilterConfig> filterConfigList) {
 
         // 创建一个数组用于返回
@@ -116,7 +126,7 @@ public class FileFilter {
         }
         return fileArrayList;
 
-        /**
+        /*
          * 高级写法，但是我还不会= =
          *     // 根据路径获取所有文件
          *     List<File> fileList = FileUtil.loopFiles(filePath);

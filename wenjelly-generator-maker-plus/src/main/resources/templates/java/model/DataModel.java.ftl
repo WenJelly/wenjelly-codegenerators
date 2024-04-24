@@ -47,4 +47,5 @@ public class DataModel {
     <@generateModel indent="    " modelInfo=modelInfo />
     </#if>
 </#list>
+
 }

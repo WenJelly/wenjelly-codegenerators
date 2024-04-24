@@ -10,10 +10,8 @@ package com.wenjelly.makerplus.generator.file;
 import cn.hutool.core.io.FileUtil;
 
 /**
- * 该类用于生成静态代码
+ * 静态文件的生成
  */
-
-
 public class StaticFileGenerator {
 
     /**

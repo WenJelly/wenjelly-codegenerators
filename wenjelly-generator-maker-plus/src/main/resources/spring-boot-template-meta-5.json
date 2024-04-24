@@ -14,7 +14,7 @@
         "fieldName": "needDocs",
         "type": "boolean",
         "description": "是否开启接口文档功能",
-        "defaultValue": true
+        "defaultValue": false
       }
     ]
   }

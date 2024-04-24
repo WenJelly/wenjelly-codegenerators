@@ -7,7 +7,6 @@ package ${basePackage}.cli.command;
  * @author ${author}
 */
 
-
 import cn.hutool.core.bean.BeanUtil;
 import com.wenjelly.generator.MainFileGenerator;
 import com.wenjelly.model.DataModel;

@@ -12,7 +12,7 @@ import com.wenjelly.makerplus.meta.Meta;
 import lombok.Data;
 
 /**
- * 模板制作配置
+ * 模板文件制作配置
  */
 @Data
 public class TemplateMakerConfig {

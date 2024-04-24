@@ -26,7 +26,6 @@ import java.io.IOException;
  * 这里已标注好了各种执行顺序
  * 如果需要修改某一个顺序的执行内容，可以继承该类重写该方法
  */
-
 public abstract class MainGeneratorTemplate {
 
     public void doGenerate() throws TemplateException, IOException, InterruptedException, freemarker.template.TemplateException {

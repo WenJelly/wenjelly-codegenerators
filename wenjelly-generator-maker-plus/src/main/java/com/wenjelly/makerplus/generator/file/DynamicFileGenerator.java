@@ -18,11 +18,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/*
- * 该类用于生成动态代码
+/**
+ * 动态文件的生成
  */
 public class DynamicFileGenerator {
-
 
     /**
      * 生成动态文件

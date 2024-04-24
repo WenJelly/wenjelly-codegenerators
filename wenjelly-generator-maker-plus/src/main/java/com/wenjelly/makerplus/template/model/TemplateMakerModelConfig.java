@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * 模板模型配置
+ */
 @Data
 public class TemplateMakerModelConfig {
 

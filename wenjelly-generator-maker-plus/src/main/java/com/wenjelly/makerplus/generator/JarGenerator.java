@@ -10,7 +10,7 @@ package com.wenjelly.makerplus.generator;
 import java.io.*;
 
 /**
- * 用于打包
+ * 对生成出来的生成器进行打jar包
  */
 public class JarGenerator {
 

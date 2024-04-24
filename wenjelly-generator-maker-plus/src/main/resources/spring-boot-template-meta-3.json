@@ -3,7 +3,7 @@
   "templateMakerFileConfig": {
     "fileGroupConfig": {
       "groupKey": "post",
-      "groupName": "帖子文件组",
+      "groupName": "帖子组",
       "condition": "needPost"
     },
     "files": [
