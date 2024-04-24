@@ -20,6 +20,9 @@ import freemarker.template.TemplateException;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * 制作生成器的模板方法设计模式，按照流程执行
+ */
 public abstract class MainGeneratorTemplate {
 
     public void doGenerator() throws TemplateException, IOException, InterruptedException {

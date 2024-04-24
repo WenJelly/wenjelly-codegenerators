@@ -10,7 +10,7 @@ package com.wenjelly.maker.meta.enums;
 import lombok.Getter;
 
 /**
- * 文件生成类型
+ * 文件生成类型枚举类
  */
 @Getter
 public enum FileGenerateTypeEnum {

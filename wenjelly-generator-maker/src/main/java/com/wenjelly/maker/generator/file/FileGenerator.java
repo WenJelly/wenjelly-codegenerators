@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 生成动态和静态，相当于结合
+ * 生成动态文件与静态文件
  */
 public class FileGenerator {
 

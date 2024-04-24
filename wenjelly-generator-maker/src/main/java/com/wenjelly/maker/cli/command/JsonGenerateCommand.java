@@ -19,6 +19,7 @@ import java.util.concurrent.Callable;
 
 /**
  * 定义一个文件路径（filePath）属性来接受 JSON 文件路径，在执行时读取该文件并转换为 DataModel 数据模型类，之后调用 MainGenerator.doGenerate 生成代码即可。
+ * 通过路径指向元信息文件进行生成代码
  */
 @Command(name = "json-generator", description = "读取JSON文件生成代码", mixinStandardHelpOptions = true)
 @Data

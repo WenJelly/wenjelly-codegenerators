@@ -13,6 +13,7 @@ import picocli.CommandLine.Command;
  * @project ${name}
  * @author ${author}
 */
+
 @Command(name = "${name}", version = "${name}${version}", mixinStandardHelpOptions = true)
 public class CommandExecutor implements Runnable {
 

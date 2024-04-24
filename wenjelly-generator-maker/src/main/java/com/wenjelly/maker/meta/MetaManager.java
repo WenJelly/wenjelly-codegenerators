@@ -11,7 +11,7 @@ import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.json.JSONUtil;
 
 /**
- * 用于管理Meta的生成，为了节约内存，这里采用双检索单例设计模式
+ * 用于管理Meta的生成，为了节约内存，这里采用双检索单例设计模式。
  */
 public class MetaManager {
 

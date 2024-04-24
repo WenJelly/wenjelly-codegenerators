@@ -12,7 +12,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-
+/**
+ * 通过模板方法设计模式，可以单独修改某一流程而不改变其他流程执行顺序
+ */
 public class DistMainGenerator extends MainGeneratorTemplate {
 
     @Test

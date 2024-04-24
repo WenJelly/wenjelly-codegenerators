@@ -9,6 +9,9 @@ package com.wenjelly.maker.model;
 
 import lombok.Data;
 
+/**
+ * 用于生成目标代码的数据模型，通过元信息配置文件生成
+ */
 @Data
 public class DataModel {
 

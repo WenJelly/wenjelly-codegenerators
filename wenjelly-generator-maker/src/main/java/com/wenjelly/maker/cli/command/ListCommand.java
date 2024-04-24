@@ -14,6 +14,9 @@ import picocli.CommandLine.Command;
 import java.io.File;
 import java.util.List;
 
+/**
+ * 查看文件列表指令模板
+ */
 @Command(name = "list", description = "查看文件列表", mixinStandardHelpOptions = true)
 public class ListCommand implements Runnable {
     @Override

@@ -9,6 +9,9 @@ package com.wenjelly.maker.meta.enums;
 
 import lombok.Getter;
 
+/**
+ * 文件类型枚举类
+ */
 @Getter
 public enum FileTypeEnum {
 

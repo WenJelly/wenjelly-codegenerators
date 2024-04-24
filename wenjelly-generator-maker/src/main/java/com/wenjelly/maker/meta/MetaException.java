@@ -7,6 +7,9 @@ package com.wenjelly.maker.meta;
  * @author WenJelly
  */
 
+/**
+ * 元信息异常类
+ */
 public class MetaException extends RuntimeException {
 
     public MetaException(String message) {

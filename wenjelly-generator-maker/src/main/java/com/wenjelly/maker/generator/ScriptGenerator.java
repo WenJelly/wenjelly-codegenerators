@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 用于封装脚本
+ * 将jar包封装成脚本
  */
 public class ScriptGenerator {
 

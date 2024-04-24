@@ -7,13 +7,15 @@ package com.wenjelly.maker.cli.command;
  * @author WenJelly
  */
 
-
 import cn.hutool.core.util.ReflectUtil;
 import com.wenjelly.maker.model.DataModel;
 import picocli.CommandLine.Command;
 
 import java.lang.reflect.Field;
 
+/**
+ * 查看配置指令模板
+ */
 @Command(name = "config", description = "查看配置", mixinStandardHelpOptions = true)
 public class ConfigCommand implements Runnable {
     @Override

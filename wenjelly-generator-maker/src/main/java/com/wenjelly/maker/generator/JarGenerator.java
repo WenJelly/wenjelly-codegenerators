@@ -10,7 +10,7 @@ package com.wenjelly.maker.generator;
 import java.io.*;
 
 /**
- * 用于打包
+ * 将生成好的目标生成器打包
  */
 public class JarGenerator {
 

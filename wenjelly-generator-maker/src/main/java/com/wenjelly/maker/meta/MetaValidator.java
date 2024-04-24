@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * 元信息校验
+ * 元信息校验。
  */
 public class MetaValidator {
 

@@ -28,8 +28,6 @@ generator generate <#list modelConfig.models as modelInfo>
             </#if>
             </#list>
 
-
-
 ```
 
 ## 参数说明

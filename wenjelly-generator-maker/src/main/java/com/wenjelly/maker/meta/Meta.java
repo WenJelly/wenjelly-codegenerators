@@ -11,6 +11,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * 元信息配置
+ */
 @Data
 public class Meta {
     private String name;

@@ -12,7 +12,6 @@ import lombok.Data;
 public class DataModel {
 
     <#list modelConfig.models as modelInfo>
-
         <#if modelInfo.groupKey??>
         /**
         *${modelInfo.groupName}

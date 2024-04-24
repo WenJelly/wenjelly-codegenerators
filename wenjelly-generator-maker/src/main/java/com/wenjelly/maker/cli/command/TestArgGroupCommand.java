@@ -16,6 +16,9 @@ import picocli.CommandLine.Option;
 
 import java.util.concurrent.Callable;
 
+/**
+ * 测试指令包含指令实现
+ */
 @Command(name = "generate", description = "生成代码", mixinStandardHelpOptions = true)
 @Data
 public class TestArgGroupCommand implements Callable {

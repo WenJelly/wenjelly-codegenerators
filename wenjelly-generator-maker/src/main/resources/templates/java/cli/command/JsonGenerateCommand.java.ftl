@@ -10,7 +10,6 @@ import picocli.CommandLine.Option;
 
 import java.util.concurrent.Callable;
 
-
 @Command(name = "json-generate", description = "读取 json 文件生成代码", mixinStandardHelpOptions = true)
 @Data
 public class JsonGenerateCommand implements Callable<Integer> {

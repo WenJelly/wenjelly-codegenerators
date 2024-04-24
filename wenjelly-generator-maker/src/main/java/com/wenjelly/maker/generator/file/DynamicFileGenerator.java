@@ -17,8 +17,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/*
- * 该类用于生成动态代码
+/**
+ * 动态文件生成
+ * 模板+数据模型
  */
 public class DynamicFileGenerator {
     /**

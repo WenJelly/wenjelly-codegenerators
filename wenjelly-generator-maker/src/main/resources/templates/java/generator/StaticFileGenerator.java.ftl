@@ -13,7 +13,6 @@ import cn.hutool.core.io.FileUtil;
  * 该类用于生成静态代码
  */
 
-
 public class StaticFileGenerator {
 
     /**

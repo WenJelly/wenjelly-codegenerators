@@ -13,6 +13,10 @@ import picocli.CommandLine.Command;
  * @project wenjelly-generators
  * @author WenJelly
  */
+
+/**
+ * 指令入口
+ */
 @Command(name = "wenjelly", version = "wenjelly 1.0", mixinStandardHelpOptions = true)
 public class CommandExecutor implements Runnable {
 
