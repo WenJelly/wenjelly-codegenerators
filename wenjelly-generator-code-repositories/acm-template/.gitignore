@@ -3,6 +3,7 @@
 target
 wenjelly-generators.iml
 generated
+.temp
 
 ### Java template
 # Compiled class file
